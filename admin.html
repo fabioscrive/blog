@@ -188,6 +188,7 @@ body { background: var(--stone); color: var(--text-body); font-family: 'Cormoran
 <nav class="admin-nav">
   <div class="admin-brand">Fabio Scrive <span>Pannello di Controllo</span></div>
   <div class="admin-nav-links">
+    <button class="admin-nav-btn primary" onclick="publishSite()">📤 Pubblica sul sito</button>
     <a href="index.html" class="admin-nav-btn" target="_blank">↗ Visita il blog</a>
   </div>
 </nav>
@@ -1061,6 +1062,25 @@ function confirmDeleteAll() {
 }
 function closeConfirm() { document.getElementById('confirm-overlay').classList.remove('open'); }
 window.addEventListener('click', e => { if (e.target === document.getElementById('confirm-overlay')) closeConfirm(); });
+
+// ── PUBLISH SITE (genera data.json) ──
+function publishSite() {
+  const data = {
+    posts: getPosts(),
+    books: getBooks(),
+    downloads: getDownloads(),
+    author: getAuthor(),
+    settings: getSettings(),
+    publishedAt: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'data.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  showToast('✅ data.json generato! Caricalo nella cartella del sito.', 'success');
+}
 
 // ── CATEGORY SUGGESTIONS ──
 function updateCatSuggestions() {

@@ -344,10 +344,32 @@ footer p { font-size: 13px; color: rgba(200,191,168,0.3); letter-spacing: 0.05em
 
 <script>
 // ── STORAGE HELPERS ──
-function getPosts() { try { return JSON.parse(localStorage.getItem('fabio_posts') || '[]'); } catch(e){ return []; } }
-function getBooks() { try { return JSON.parse(localStorage.getItem('fabio_books') || '[]'); } catch(e){ return []; } }
-function getAuthor() { try { return JSON.parse(localStorage.getItem('fabio_author') || 'null'); } catch(e){ return null; } }
-function getDownloads() { try { return JSON.parse(localStorage.getItem('fabio_downloads') || '[]'); } catch(e){ return []; } }
+// I dati vengono caricati da data.json (generato dall'admin con "Pubblica sul sito").
+// Fallback al localStorage solo se data.json non è disponibile (sviluppo locale).
+let _siteData = null;
+
+async function loadSiteData() {
+  if (_siteData) return _siteData;
+  try {
+    const res = await fetch('data.json?_=' + Date.now());
+    if (!res.ok) throw new Error('not found');
+    _siteData = await res.json();
+  } catch(e) {
+    // Fallback localStorage (solo sviluppo locale)
+    _siteData = {
+      posts:     JSON.parse(localStorage.getItem('fabio_posts')     || '[]'),
+      books:     JSON.parse(localStorage.getItem('fabio_books')     || '[]'),
+      downloads: JSON.parse(localStorage.getItem('fabio_downloads') || '[]'),
+      author:    JSON.parse(localStorage.getItem('fabio_author')    || 'null'),
+    };
+  }
+  return _siteData;
+}
+
+async function getPosts()     { return (await loadSiteData()).posts     || []; }
+async function getBooks()     { return (await loadSiteData()).books     || []; }
+async function getAuthor()    { return (await loadSiteData()).author    || null; }
+async function getDownloads() { return (await loadSiteData()).downloads || []; }
 
 // ── TABS ──
 function showTab(tab, e) {
@@ -377,8 +399,8 @@ function fbShare(url, title) {
 }
 
 // ── RENDER POSTS ──
-function renderPosts(filterCat) {
-  const posts = getPosts().filter(p => p.published !== false);
+async function renderPosts(filterCat) {
+  const posts = (await getPosts()).filter(p => p.published !== false);
   const filtered = filterCat ? posts.filter(p => p.category === filterCat) : posts;
   const container = document.getElementById('posts-container');
   const empty = document.getElementById('empty-posts');
@@ -441,8 +463,8 @@ function renderPosts(filterCat) {
 }
 
 // ── OPEN SINGLE POST ──
-function openPost(id) {
-  const posts = getPosts();
+async function openPost(id) {
+  const posts = await getPosts();
   const post = posts.find(p => p.id === id);
   if (!post) return;
   document.getElementById('posts-list').style.display = 'none';
@@ -516,8 +538,8 @@ function closeSingle() {
 }
 
 // ── RENDER BOOKS ──
-function renderBooks() {
-  const books = getBooks();
+async function renderBooks() {
+  const books = await getBooks();
   const grid = document.getElementById('books-grid');
   const empty = document.getElementById('empty-books');
   if (books.length === 0) { grid.innerHTML = ''; empty.style.display = ''; return; }
@@ -541,8 +563,8 @@ function renderBooks() {
 }
 
 // ── OPEN BOOK MODAL ──
-function openBook(id) {
-  const book = getBooks().find(b => b.id === id);
+async function openBook(id) {
+  const book = (await getBooks()).find(b => b.id === id);
   if (!book) return;
   const coverHtml = book.coverImg
     ? `<img src="${escAttr(book.coverImg)}" alt="" style="max-width:180px; display:block; margin:0 auto 28px; box-shadow:-8px 8px 30px rgba(0,0,0,0.6);">`
@@ -564,8 +586,8 @@ function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&
 function escAttr(s) { return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
 // ── RENDER AUTHOR ──
-function renderAuthor() {
-  const author = getAuthor();
+async function renderAuthor() {
+  const author = await getAuthor();
   const el = document.getElementById('sidebar-author-content');
   if (!el) return;
   if (!author) return; // keep default HTML
@@ -580,8 +602,8 @@ function renderAuthor() {
 }
 
 // ── RENDER DOWNLOADS ──
-function renderDownloads() {
-  const downloads = getDownloads();
+async function renderDownloads() {
+  const downloads = await getDownloads();
   const grid = document.getElementById('downloads-grid');
   const empty = document.getElementById('empty-downloads');
   if (downloads.length === 0) { grid.innerHTML = ''; empty.style.display = ''; return; }
@@ -604,36 +626,12 @@ function renderDownloads() {
   }).join('');
 }
 
-// ── SEED DATA (if empty) ──
-function seedData() {
-  if (getPosts().length === 0) {
-    const sample = [{
-      id: 'post-sample-1',
-      title: 'Benvenuti su Fabio Scrive',
-      date: new Date().toISOString(),
-      category: 'Note dell\'autore',
-      published: true,
-      coverImg: '',
-      body: '<p>Benvenuti nel mio spazio. Questo è il luogo dove racconto storie, condivido pensieri e tengo traccia del lavoro che faccio ogni giorno dietro la tastiera.</p><p>Trovate qui articoli sulla scrittura, aggiornamenti sui miei libri e riflessioni sparse sul mestiere del narratore. Ogni post che pubblico può essere condiviso direttamente su Facebook con un clic.</p><p>Buona lettura.</p>'
-    }];
-    localStorage.setItem('fabio_posts', JSON.stringify(sample));
-  }
-  if (getBooks().length === 0) {
-    const sampleBooks = [{
-      id: 'book-sample-1',
-      title: 'La Cassaforte di Pietra',
-      coverImg: 'cassaforte.jpg',
-      buyLink: 'https://amzn.eu/d/08nI668f',
-      synopsis: 'Sei anime, sei crepe da restaurare, sei destini che convergono nella risoluzione di un unico polveroso mistero. Sullo sfondo di una Napoli che attraversa più di quarant\'anni della sua storia, talpe, sassi e malta ne rinforzeranno la fibra e con la sua quella di tutti noi.'
-    }];
-    localStorage.setItem('fabio_books', JSON.stringify(sampleBooks));
-  }
-}
-
 // ── INIT ──
-seedData();
-renderPosts();
-renderAuthor();
+async function init() {
+  await renderPosts();
+  await renderAuthor();
+}
+init();
 
 window.addEventListener('click', e => {
   if (e.target === document.getElementById('post-modal')) closeModal();
