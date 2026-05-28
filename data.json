@@ -1,0 +1,16 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "Esempio GitHub",
+      "date": "2023-10-27",
+      "published": true
+    }
+  ],
+  "books": [],
+  "author": {
+    "name": "Fabio",
+    "bio": "Scrittore"
+  },
+  "downloads": []
+}
