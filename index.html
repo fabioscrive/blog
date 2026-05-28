@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fabio Scrive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold: #c9a84c; --gold-light: #e8d08a; --gold-dark: #8a6820;
+  --stone: #1a1714; --stone-mid: #2c2720; --stone-light: #3d3730;
+  --cream: #f2ead8; --cream-dark: #d4c9a8; --text-body: #c8bfa8;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--stone); color: var(--text-body); font-family: 'Cormorant Garamond', serif; font-size: 18px; line-height: 1.75; overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 48px;
+  background: rgba(14,12,10,0.96); backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--stone-light);
+}
+.nav-brand { font-family: 'Playfair Display', serif; font-size: 26px; font-style: italic; color: var(--gold); text-decoration: none; }
+.nav-brand span { font-style: normal; color: var(--cream); }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.22em; color: var(--cream-dark); text-decoration: none; transition: color .2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+
+/* HERO HEADER */
+.site-header {
+  padding: 140px 48px 70px;
+  text-align: center;
+  position: relative; overflow: hidden;
+  background: var(--stone);
+}
+.site-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(201,168,76,0.07) 0%, transparent 65%);
+}
+.site-header-label { font-family: 'Bebas Neue', sans-serif; font-size: 12px; letter-spacing: 0.4em; color: var(--gold); margin-bottom: 16px; }
+.site-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(52px, 8vw, 100px); font-style: italic; font-weight: 900; color: var(--cream); line-height: 1; margin-bottom: 20px; }
+.site-header h1 em { color: var(--gold); font-style: normal; }
+.site-header p { font-size: 20px; color: var(--text-body); font-style: italic; max-width: 520px; margin: 0 auto; }
+.header-line { width: 60px; height: 1px; background: var(--gold-dark); margin: 28px auto 0; }
+
+/* TABS */
+.tabs-bar { display: flex; justify-content: center; gap: 0; border-bottom: 1px solid var(--stone-light); background: var(--stone-mid); }
+.tab-btn {
+  font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 0.25em;
+  padding: 18px 40px; background: transparent; border: none; color: var(--text-body);
+  cursor: pointer; position: relative; transition: color .2s;
+}
+.tab-btn::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--gold); transform: scaleX(0); transition: transform .25s; }
+.tab-btn.active { color: var(--gold); }
+.tab-btn.active::after { transform: scaleX(1); }
+.tab-btn:hover { color: var(--cream); }
+
+/* LAYOUT */
+.main-layout { max-width: 1100px; margin: 0 auto; padding: 60px 40px; display: grid; grid-template-columns: 1fr 320px; gap: 60px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* POSTS */
+.posts-list { display: flex; flex-direction: column; gap: 56px; }
+.post-card { border-bottom: 1px solid var(--stone-light); padding-bottom: 56px; }
+.post-card:last-child { border-bottom: none; }
+.post-meta { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+.post-date { font-family: 'Bebas Neue', sans-serif; font-size: 12px; letter-spacing: 0.25em; color: var(--gold-dark); }
+.post-category { font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 0.2em; padding: 4px 12px; border: 1px solid var(--stone-light); color: var(--text-body); }
+.post-title { font-family: 'Playfair Display', serif; font-size: clamp(24px, 3vw, 36px); font-weight: 700; color: var(--cream); line-height: 1.25; margin-bottom: 16px; cursor: pointer; transition: color .2s; }
+.post-title:hover { color: var(--gold); }
+.post-excerpt { font-size: 17px; line-height: 1.8; margin-bottom: 24px; }
+.post-cover { width: 100%; aspect-ratio: 16/7; object-fit: cover; margin-bottom: 24px; filter: grayscale(20%); }
+.post-cover-placeholder { width: 100%; aspect-ratio: 16/7; background: var(--stone-mid); margin-bottom: 24px; display: flex; align-items: center; justify-content: center; }
+.post-cover-placeholder span { font-family: 'Playfair Display', serif; font-size: 48px; color: rgba(201,168,76,0.15); font-weight: 900; }
+.post-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.btn-read { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.2em; padding: 10px 28px; background: var(--gold); color: var(--stone); cursor: pointer; border: none; transition: background .2s; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); }
+.btn-read:hover { background: var(--gold-light); }
+.btn-fb { display: inline-flex; align-items: center; gap: 8px; font-family: 'Bebas Neue', sans-serif; font-size: 12px; letter-spacing: 0.18em; padding: 9px 18px; border: 1px solid #3b5998; color: #7b9bd8; background: transparent; cursor: pointer; text-decoration: none; transition: background .2s, color .2s; }
+.btn-fb:hover { background: rgba(59,89,152,0.15); color: #a8bef0; }
+.btn-fb svg { flex-shrink: 0; }
+
+/* SINGLE POST */
+#single-post { display: none; }
+#single-post.active { display: block; }
+.single-back { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.2em; color: var(--gold-dark); cursor: pointer; margin-bottom: 32px; display: inline-flex; align-items: center; gap: 8px; transition: color .2s; }
+.single-back:hover { color: var(--gold); }
+.single-title { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 54px); font-weight: 900; color: var(--cream); line-height: 1.15; margin-bottom: 20px; }
+.single-body { font-size: 19px; line-height: 1.9; }
+.single-body p { margin-bottom: 22px; }
+.single-body p:first-of-type::first-letter { font-family: 'Playfair Display', serif; font-size: 72px; float: left; line-height: 0.8; margin-right: 10px; color: var(--gold); font-weight: 700; }
+.single-share { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--stone-light); display: flex; align-items: center; gap: 20px; }
+.single-share span { font-family: 'Bebas Neue', sans-serif; font-size: 12px; letter-spacing: 0.3em; color: var(--text-body); }
+
+/* SIDEBAR */
+.sidebar { display: flex; flex-direction: column; gap: 40px; }
+.sidebar-widget { background: var(--stone-mid); padding: 28px; }
+.sidebar-widget-title { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.3em; color: var(--gold); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--stone-light); }
+.sidebar-author-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; object-position: top; filter: grayscale(100%); margin-bottom: 14px; border: 2px solid var(--stone-light); }
+.sidebar-author-name { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--cream); font-weight: 700; margin-bottom: 8px; }
+.sidebar-author-bio { font-size: 15px; line-height: 1.65; }
+.recent-posts-list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+.recent-posts-list li { padding-bottom: 16px; border-bottom: 1px solid var(--stone-light); cursor: pointer; }
+.recent-posts-list li:last-child { border-bottom: none; padding-bottom: 0; }
+.recent-post-title { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--cream-dark); font-weight: 700; transition: color .2s; }
+.recent-posts-list li:hover .recent-post-title { color: var(--gold); }
+.recent-post-date { font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 0.2em; color: var(--gold-dark); margin-top: 4px; }
+.categories-list { display: flex; flex-direction: column; gap: 10px; }
+.cat-item { display: flex; justify-content: space-between; align-items: center; font-size: 15px; color: var(--cream-dark); cursor: pointer; padding: 6px 0; border-bottom: 1px solid rgba(61,55,48,0.5); transition: color .2s; }
+.cat-item:hover { color: var(--gold); }
+.cat-count { font-family: 'Bebas Neue', sans-serif; font-size: 12px; color: var(--gold-dark); }
+
+/* LIBRI */
+.books-header { margin-bottom: 48px; }
+.books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 32px; }
+.book-card { background: var(--stone-mid); position: relative; overflow: hidden; transition: transform .3s; }
+.book-card:hover { transform: translateY(-4px); }
+.book-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold-dark); transform: scaleX(0); transition: transform .3s; }
+.book-card:hover::before { transform: scaleX(1); }
+.book-cover-img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; }
+.book-cover-placeholder { width: 100%; aspect-ratio: 2/3; background: var(--stone-light); display: flex; align-items: center; justify-content: center; }
+.book-cover-placeholder span { font-family: 'Playfair Display', serif; font-size: 56px; color: rgba(201,168,76,0.2); font-weight: 900; }
+.book-info { padding: 24px; }
+.book-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--cream); font-weight: 700; margin-bottom: 8px; line-height: 1.25; }
+.book-synopsis { font-size: 15px; line-height: 1.7; margin-bottom: 20px; color: var(--text-body); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.btn-buy { display: inline-flex; align-items: center; gap: 8px; background: var(--gold); color: var(--stone); font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.15em; padding: 10px 22px; text-decoration: none; transition: background .2s; clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px)); }
+.btn-buy:hover { background: var(--gold-light); }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 40px 20px; }
+.modal-overlay.open { display: flex; }
+.modal-box { background: var(--stone-mid); border: 1px solid var(--stone-light); max-width: 760px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 48px; position: relative; }
+.modal-close { position: absolute; top: 20px; right: 24px; font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.2em; color: var(--text-body); background: none; border: none; cursor: pointer; transition: color .2s; }
+.modal-close:hover { color: var(--gold); }
+.modal-cover { width: 100%; max-width: 200px; margin: 0 auto 24px; display: block; }
+.modal-title { font-family: 'Playfair Display', serif; font-size: clamp(26px, 4vw, 42px); font-weight: 900; color: var(--cream); line-height: 1.15; margin-bottom: 16px; }
+.modal-meta { margin-bottom: 24px; }
+.modal-body { font-size: 17px; line-height: 1.85; }
+.modal-body p { margin-bottom: 18px; }
+.modal-body p:first-of-type::first-letter { font-family: 'Playfair Display', serif; font-size: 60px; float: left; line-height: 0.8; margin-right: 8px; color: var(--gold); font-weight: 700; }
+.modal-share { margin-top: 32px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 80px 40px; }
+.empty-icon { font-family: 'Playfair Display', serif; font-size: 72px; color: rgba(201,168,76,0.12); font-weight: 900; margin-bottom: 20px; }
+.empty-title { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--cream-dark); margin-bottom: 12px; }
+.empty-text { font-size: 16px; font-style: italic; }
+
+/* ORNAMENT */
+.ornament { color: var(--gold-dark); text-align: center; letter-spacing: 12px; font-size: 18px; margin: 8px 0; }
+
+/* FOOTER */
+footer { background: #0e0c0a; padding: 48px 40px 32px; border-top: 1px solid var(--stone-light); text-align: center; }
+.footer-brand { font-family: 'Playfair Display', serif; font-size: 28px; font-style: italic; color: var(--gold); margin-bottom: 8px; }
+.footer-links { display: flex; justify-content: center; gap: 28px; margin-bottom: 20px; flex-wrap: wrap; }
+.footer-links a { font-family: 'Bebas Neue', sans-serif; font-size: 12px; letter-spacing: 0.2em; color: var(--text-body); text-decoration: none; transition: color .2s; }
+.footer-links a:hover { color: var(--gold); }
+footer p { font-size: 13px; color: rgba(200,191,168,0.3); letter-spacing: 0.05em; }
+
+@media (max-width: 860px) {
+  nav { padding: 16px 20px; }
+  .main-layout { grid-template-columns: 1fr; gap: 40px; padding: 40px 20px; }
+  .sidebar { display: none; }
+  .site-header { padding: 120px 24px 50px; }
+  .tabs-bar { gap: 0; }
+  .tab-btn { padding: 14px 20px; font-size: 12px; }
+  .books-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="fabio-scrive.html" class="nav-brand">Fabio <span>Scrive</span></a>
+  <div class="nav-links">
+    <a href="#" class="active" onclick="showTab('blog', event)">Blog</a>
+    <a href="#" onclick="showTab('libri', event)">I Miei Libri</a>
+
+  </div>
+</nav>
+
+<header class="site-header">
+  <div class="site-header-label">Il blog di Fabio Bisesti</div>
+  <h1>Fabio <em>Scrive</em></h1>
+  <p>Parole, storie e riflessioni dal tavolo di un narratore.</p>
+  <div class="header-line"></div>
+</header>
+
+<div class="tabs-bar">
+  <button class="tab-btn active" id="tab-blog" onclick="showTab('blog', event)">Blog</button>
+  <button class="tab-btn" id="tab-libri" onclick="showTab('libri', event)">I Miei Libri</button>
+</div>
+
+<!-- BLOG TAB -->
+<div class="tab-panel active" id="panel-blog">
+  <div class="main-layout">
+    <main>
+      <!-- Single post view -->
+      <div id="single-post">
+        <div class="single-back" onclick="closeSingle()">← Torna al blog</div>
+        <div id="single-content"></div>
+      </div>
+      <!-- Posts list -->
+      <div id="posts-list">
+        <div class="posts-list" id="posts-container"></div>
+        <div class="empty-state" id="empty-posts" style="display:none;">
+          <div class="empty-icon">✍</div>
+          <div class="empty-title">Ancora nessun articolo</div>
+          <p class="empty-text">Accedi al pannello di controllo per pubblicare il tuo primo post.</p>
+        </div>
+      </div>
+    </main>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-widget">
+        <div class="sidebar-widget-title">L'Autore</div>
+        <img src="autore_B_N.png" alt="Fabio Bisesti" class="sidebar-author-img" onerror="this.style.display='none'">
+        <div class="sidebar-author-name">Fabio Bisesti</div>
+        <p class="sidebar-author-bio">Scrittore. Autore di <em>La Cassaforte di Pietra</em>. Racconto storie ambientate nella Napoli che conosco e amo.</p>
+      </div>
+      <div class="sidebar-widget">
+        <div class="sidebar-widget-title">Post Recenti</div>
+        <ul class="recent-posts-list" id="recent-list"></ul>
+        <div id="recent-empty" style="font-size:14px; font-style:italic; display:none;">Nessun post ancora.</div>
+      </div>
+      <div class="sidebar-widget">
+        <div class="sidebar-widget-title">Categorie</div>
+        <div class="categories-list" id="categories-list"></div>
+        <div id="cat-empty" style="font-size:14px; font-style:italic; display:none;">Nessuna categoria.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- LIBRI TAB -->
+<div class="tab-panel" id="panel-libri">
+  <div style="max-width: 1100px; margin: 0 auto; padding: 60px 40px;">
+    <div class="books-header">
+      <div style="font-family:'Bebas Neue',sans-serif; font-size:12px; letter-spacing:.4em; color:var(--gold); margin-bottom:12px;">La mia libreria</div>
+      <h2 style="font-family:'Playfair Display',serif; font-size:clamp(32px,4vw,52px); font-weight:700; color:var(--cream); line-height:1.15;">I Miei Libri</h2>
+    </div>
+    <div class="books-grid" id="books-grid"></div>
+    <div class="empty-state" id="empty-books" style="display:none;">
+      <div class="empty-icon">📖</div>
+      <div class="empty-title">Nessun libro ancora</div>
+      <p class="empty-text">Accedi al pannello di controllo per aggiungere i tuoi libri.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL POST COMPLETO -->
+<div class="modal-overlay" id="post-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕ CHIUDI</button>
+    <div id="modal-post-content"></div>
+  </div>
+</div>
+
+<!-- MODAL LIBRO -->
+<div class="modal-overlay" id="book-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeBookModal()">✕ CHIUDI</button>
+    <div id="modal-book-content"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">Fabio Scrive</div>
+  <div class="footer-links">
+    <a href="#" onclick="showTab('blog', event)">Blog</a>
+    <a href="#" onclick="showTab('libri', event)">I Miei Libri</a>
+
+    <a href="la-cassaforte-di-pietra.html">La Cassaforte di Pietra</a>
+  </div>
+  <p>© 2025 Fabio Bisesti · Tutti i diritti riservati</p>
+</footer>
+
+<script>
+// ── STORAGE HELPERS ──
+function getPosts() { try { return JSON.parse(localStorage.getItem('fabio_posts') || '[]'); } catch(e){ return []; } }
+function getBooks() { try { return JSON.parse(localStorage.getItem('fabio_books') || '[]'); } catch(e){ return []; } }
+
+// ── TABS ──
+function showTab(tab, e) {
+  if (e) e.preventDefault();
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'blog') renderPosts();
+  if (tab === 'libri') renderBooks();
+}
+
+// ── FORMAT DATE ──
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+// ── FACEBOOK SHARE ──
+function fbShare(url, title) {
+  const text = encodeURIComponent(title || document.title);
+  const shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url || window.location.href) + '&quote=' + text;
+  window.open(shareUrl, '_blank', 'width=600,height=400');
+}
+
+// ── RENDER POSTS ──
+function renderPosts(filterCat) {
+  const posts = getPosts().filter(p => p.published !== false);
+  const filtered = filterCat ? posts.filter(p => p.category === filterCat) : posts;
+  const container = document.getElementById('posts-container');
+  const empty = document.getElementById('empty-posts');
+  const single = document.getElementById('single-post');
+  single.classList.remove('active');
+  document.getElementById('posts-list').style.display = '';
+
+  // recent sidebar
+  const recentList = document.getElementById('recent-list');
+  const recentEmpty = document.getElementById('recent-empty');
+  if (posts.length === 0) { recentList.innerHTML = ''; recentEmpty.style.display = ''; }
+  else {
+    recentEmpty.style.display = 'none';
+    recentList.innerHTML = posts.slice(0, 5).map(p => `
+      <li onclick="openPost('${p.id}')">
+        <div class="recent-post-title">${escHtml(p.title)}</div>
+        <div class="recent-post-date">${formatDate(p.date)}</div>
+      </li>`).join('');
+  }
+
+  // categories sidebar
+  const cats = {};
+  posts.forEach(p => { if (p.category) cats[p.category] = (cats[p.category] || 0) + 1; });
+  const catList = document.getElementById('categories-list');
+  const catEmpty = document.getElementById('cat-empty');
+  const catKeys = Object.keys(cats);
+  if (catKeys.length === 0) { catList.innerHTML = ''; catEmpty.style.display = ''; }
+  else {
+    catEmpty.style.display = 'none';
+    catList.innerHTML = catKeys.map(c => `
+      <div class="cat-item" onclick="renderPosts('${escAttr(c)}')">
+        ${escHtml(c)} <span class="cat-count">${cats[c]}</span>
+      </div>`).join('');
+  }
+
+  if (filtered.length === 0) { container.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  container.innerHTML = filtered.map(post => {
+    const excerpt = post.body ? post.body.replace(/<[^>]+>/g, '').substring(0, 220) + '…' : '';
+    const coverHtml = post.coverImg
+      ? `<img src="${escAttr(post.coverImg)}" alt="" class="post-cover">`
+      : `<div class="post-cover-placeholder"><span>${escHtml(post.title[0] || '✦')}</span></div>`;
+    return `<article class="post-card">
+      <div class="post-meta">
+        <span class="post-date">${formatDate(post.date)}</span>
+        ${post.category ? `<span class="post-category">${escHtml(post.category)}</span>` : ''}
+      </div>
+      ${coverHtml}
+      <h2 class="post-title" onclick="openPost('${post.id}')">${escHtml(post.title)}</h2>
+      <p class="post-excerpt">${escHtml(excerpt)}</p>
+      <div class="post-actions">
+        <button class="btn-read" onclick="openPost('${post.id}')">Leggi l'articolo</button>
+        <a href="#" class="btn-fb" onclick="fbShare(window.location.href+'#${post.id}', '${escAttr(post.title)}'); return false;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Condividi su Facebook
+        </a>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+// ── OPEN SINGLE POST ──
+function openPost(id) {
+  const posts = getPosts();
+  const post = posts.find(p => p.id === id);
+  if (!post) return;
+  document.getElementById('posts-list').style.display = 'none';
+  const single = document.getElementById('single-post');
+  single.classList.add('active');
+  const coverHtml = post.coverImg
+    ? `<img src="${escAttr(post.coverImg)}" alt="" class="post-cover" style="margin-bottom:32px;">`
+    : '';
+  document.getElementById('single-content').innerHTML = `
+    <div class="post-meta" style="margin-bottom:20px;">
+      <span class="post-date">${formatDate(post.date)}</span>
+      ${post.category ? `<span class="post-category">${escHtml(post.category)}</span>` : ''}
+    </div>
+    ${coverHtml}
+    <h1 class="single-title">${escHtml(post.title)}</h1>
+    <div class="single-body">${post.body || ''}</div>
+    <div class="single-share">
+      <span>Condividi:</span>
+      <a href="#" class="btn-fb" onclick="fbShare(window.location.href+'#${post.id}', '${escAttr(post.title)}'); return false;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Condividi su Facebook
+      </a>
+    </div>
+  `;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeSingle() {
+  document.getElementById('single-post').classList.remove('active');
+  document.getElementById('posts-list').style.display = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── RENDER BOOKS ──
+function renderBooks() {
+  const books = getBooks();
+  const grid = document.getElementById('books-grid');
+  const empty = document.getElementById('empty-books');
+  if (books.length === 0) { grid.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  grid.innerHTML = books.map(book => {
+    const coverHtml = book.coverImg
+      ? `<img src="${escAttr(book.coverImg)}" alt="${escAttr(book.title)}" class="book-cover-img">`
+      : `<div class="book-cover-placeholder"><span>${escHtml((book.title||'L')[0])}</span></div>`;
+    return `<div class="book-card">
+      ${coverHtml}
+      <div class="book-info">
+        <div class="book-title">${escHtml(book.title)}</div>
+        <p class="book-synopsis">${escHtml(book.synopsis || '')}</p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+          <button class="btn-read" onclick="openBook('${book.id}')" style="font-size:12px; padding:8px 18px;">Scopri di più</button>
+          ${book.buyLink ? `<a href="${escAttr(book.buyLink)}" target="_blank" rel="noopener" class="btn-buy">Acquista</a>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── OPEN BOOK MODAL ──
+function openBook(id) {
+  const book = getBooks().find(b => b.id === id);
+  if (!book) return;
+  const coverHtml = book.coverImg
+    ? `<img src="${escAttr(book.coverImg)}" alt="" style="max-width:180px; display:block; margin:0 auto 28px; box-shadow:-8px 8px 30px rgba(0,0,0,0.6);">`
+    : '';
+  document.getElementById('modal-book-content').innerHTML = `
+    ${coverHtml}
+    <h2 class="modal-title">${escHtml(book.title)}</h2>
+    <div class="modal-body">${(book.synopsis||'').split('\n').map(l => l.trim() ? `<p>${escHtml(l)}</p>` : '').join('')}</div>
+    ${book.buyLink ? `<div style="margin-top:28px;"><a href="${escAttr(book.buyLink)}" target="_blank" rel="noopener" class="btn-buy" style="font-size:15px; padding:14px 32px;">Acquista ora</a></div>` : ''}
+  `;
+  document.getElementById('book-modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('post-modal').classList.remove('open'); }
+function closeBookModal() { document.getElementById('book-modal').classList.remove('open'); }
+
+// ── ESCAPE HELPERS ──
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escAttr(s) { return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+// ── SEED DATA (if empty) ──
+function seedData() {
+  if (getPosts().length === 0) {
+    const sample = [{
+      id: 'post-sample-1',
+      title: 'Benvenuti su Fabio Scrive',
+      date: new Date().toISOString(),
+      category: 'Note dell\'autore',
+      published: true,
+      coverImg: '',
+      body: '<p>Benvenuti nel mio spazio. Questo è il luogo dove racconto storie, condivido pensieri e tengo traccia del lavoro che faccio ogni giorno dietro la tastiera.</p><p>Trovate qui articoli sulla scrittura, aggiornamenti sui miei libri e riflessioni sparse sul mestiere del narratore. Ogni post che pubblico può essere condiviso direttamente su Facebook con un clic.</p><p>Buona lettura.</p>'
+    }];
+    localStorage.setItem('fabio_posts', JSON.stringify(sample));
+  }
+  if (getBooks().length === 0) {
+    const sampleBooks = [{
+      id: 'book-sample-1',
+      title: 'La Cassaforte di Pietra',
+      coverImg: 'cassaforte.jpg',
+      buyLink: 'https://amzn.eu/d/08nI668f',
+      synopsis: 'Sei anime, sei crepe da restaurare, sei destini che convergono nella risoluzione di un unico polveroso mistero. Sullo sfondo di una Napoli che attraversa più di quarant\'anni della sua storia, talpe, sassi e malta ne rinforzeranno la fibra e con la sua quella di tutti noi.'
+    }];
+    localStorage.setItem('fabio_books', JSON.stringify(sampleBooks));
+  }
+}
+
+// ── INIT ──
+seedData();
+renderPosts();
+
+window.addEventListener('click', e => {
+  if (e.target === document.getElementById('post-modal')) closeModal();
+  if (e.target === document.getElementById('book-modal')) closeBookModal();
+});
+</script>
+</body>
+</html>
