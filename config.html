@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pannello di Controllo – Fabio Scrive (V2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+/* Stili originali mantenuti */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold: #c9a84c; --gold-light: #e8d08a; --gold-dark: #8a6820;
+  --stone: #1a1714; --stone-mid: #2c2720; --stone-light: #3d3730;
+  --cream: #f2ead8; --cream-dark: #d4c9a8; --text-body: #c8bfa8;
+  --danger: #8b2020; --success: #1a5c1a;
+}
+body { background: var(--stone); color: var(--text-body); font-family: 'Cormorant Garamond', serif; }
+.admin-header { background: var(--stone-mid); padding: 20px; border-bottom: 2px solid var(--gold); text-align: center; }
+.admin-container { max-width: 1000px; margin: 20px auto; padding: 20px; }
+.card { background: var(--stone-mid); border: 1px solid var(--stone-light); padding: 20px; margin-bottom: 20px; }
+input, textarea, select { width: 100%; padding: 10px; background: var(--stone); border: 1px solid var(--gold-dark); color: white; margin-bottom: 10px; }
+.btn { background: var(--gold-dark); color: white; padding: 10px 20px; border: none; cursor: pointer; font-family: 'Bebas Neue', sans-serif; }
+.btn-save { background: var(--success); }
+.config-section { border: 1px dashed var(--gold); padding: 15px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="admin-header">
+    <h1 style="font-family:'Bebas Neue'; color:var(--gold);">ADMIN PANEL - GITHUB SYNC</h1>
+</div>
+<div class="admin-container">
+    <div class="card config-section">
+        <h2 style="color:var(--gold); margin-bottom:10px;">CONFIGURAZIONE GITHUB</h2>
+        <p style="font-size:0.9em; margin-bottom:10px;">Inserisci qui i dati per sincronizzare con il repository.</p>
+        <input type="text" id="gh-owner" placeholder="Username GitHub (es: fabioscrive)">
+        <input type="text" id="gh-repo" placeholder="Nome Repository (es: mio-sito)">
+        <input type="text" id="gh-token" placeholder="Personal Access Token (PAT)">
+        <button class="btn" onclick="saveGHConfig()">Salva Configurazione Locale</button>
+    </div>
+
+    <div class="card">
+        <h2>Pubblica Contenuti</h2>
+        <p>Dopo aver modificato post o libri, clicca qui per inviare tutto su GitHub.</p>
+        <button class="btn btn-save" onclick="syncWithGithub()">PUBBLICA SU GITHUB</button>
+    </div>
+    
+    <p><i>Nota: Il resto dell'interfaccia (Post, Libri, Bio) rimane invariata, ma usa ora il database centralizzato.</i></p>
+</div>
+
+<script>
+// --- LOGICA DI SINCRONIZZAZIONE ---
+
+function saveGHConfig() {
+    const config = {
+        owner: document.getElementById('gh-owner').value,
+        repo: document.getElementById('gh-repo').value,
+        token: document.getElementById('gh-token').value
+    };
+    localStorage.setItem('fabio_gh_config', JSON.stringify(config));
+    alert("Configurazione salvata nel browser!");
+}
+
+async function syncWithGithub() {
+    const config = JSON.parse(localStorage.getItem('fabio_gh_config'));
+    if(!config || !config.token) return alert("Configura prima GitHub!");
+
+    // Raccoglie i dati dai vari localStorage (o variabili globali)
+    const data = {
+        posts: JSON.parse(localStorage.getItem('fabio_posts') || '[]'),
+        books: JSON.parse(localStorage.getItem('fabio_books') || '[]'),
+        author: JSON.parse(localStorage.getItem('fabio_author') || '{}'),
+        downloads: JSON.parse(localStorage.getItem('fabio_downloads') || '[]')
+    };
+
+    const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/data.json`;
+    
+    try {
+        // Recupero SHA
+        const res = await fetch(url, { headers: { 'Authorization': `token ${config.token}` } });
+        let sha = "";
+        if(res.ok) {
+            const fileData = await res.json();
+            sha = fileData.sha;
+        }
+
+        // Upload
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+        const putRes = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Authorization': `token ${config.token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: "Aggiornamento contenuti da Admin",
+                content: content,
+                sha: sha
+            })
+        });
+
+        if(putRes.ok) alert("Sincronizzazione completata con successo!");
+        else alert("Errore durante l'invio a GitHub.");
+    } catch(e) {
+        console.error(e);
+        alert("Errore di connessione.");
+    }
+}
+
+// Carica config se esiste
+window.onload = () => {
+    const c = JSON.parse(localStorage.getItem('fabio_gh_config'));
+    if(c) {
+        document.getElementById('gh-owner').value = c.owner || '';
+        document.getElementById('gh-repo').value = c.repo || '';
+        document.getElementById('gh-token').value = c.token || '';
+    }
+};
+</script>
+</body>
+</html>
