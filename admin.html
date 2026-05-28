@@ -141,6 +141,14 @@ body { background: var(--stone); color: var(--text-body); font-family: 'Cormoran
 .book-thumb { width: 50px; height: 70px; object-fit: cover; border: 1px solid var(--stone-light); }
 .book-thumb-placeholder { width: 50px; height: 70px; background: var(--stone-light); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--gold-dark); }
 
+/* Post photo gallery (admin) */
+.photo-thumb-wrap { position: relative; width: 110px; }
+.photo-thumb-wrap img { width: 110px; height: 80px; object-fit: cover; border: 1px solid var(--stone-light); display: block; }
+.photo-thumb-badge { position: absolute; top: 4px; left: 4px; background: var(--gold); color: var(--stone); font-family: 'Bebas Neue', sans-serif; font-size: 10px; letter-spacing: .1em; padding: 2px 7px; }
+.photo-thumb-remove { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.7); color: #fff; border: none; cursor: pointer; font-size: 13px; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+.photo-thumb-remove:hover { background: var(--danger); }
+.photo-thumb-label { font-family: 'Bebas Neue', sans-serif; font-size: 10px; letter-spacing: .1em; color: var(--text-body); text-align: center; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 /* ── TOGGLE ── */
 .toggle-row { display: flex; align-items: center; gap: 14px; }
 .toggle { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
@@ -206,6 +214,12 @@ body { background: var(--stone); color: var(--text-body); font-family: 'Cormoran
       <span class="sidebar-icon">📚</span> I Miei Libri
     </button>
     <div class="admin-sidebar-section">Impostazioni</div>
+    <button class="sidebar-nav-item" onclick="showPanel('autore')">
+      <span class="sidebar-icon">👤</span> Profilo Autore
+    </button>
+    <button class="sidebar-nav-item" onclick="showPanel('downloads')">
+      <span class="sidebar-icon">📥</span> Download
+    </button>
     <button class="sidebar-nav-item" onclick="showPanel('settings')">
       <span class="sidebar-icon">⚙</span> Impostazioni
     </button>
@@ -281,17 +295,18 @@ body { background: var(--stone); color: var(--text-body); font-family: 'Cormoran
         <div class="editor-area" id="post-body" contenteditable="true" spellcheck="true"></div>
       </div>
       <div class="form-section">
-        <div class="form-section-title">Immagine di copertina</div>
+        <div class="form-section-title">Foto del post</div>
+        <p style="font-size:15px; margin-bottom:20px; font-style:italic;">La prima foto viene usata come copertina. Puoi aggiungerne quante vuoi.</p>
         <div class="form-group">
-          <label>Carica immagine (opzionale)</label>
-          <input type="file" id="post-cover-file" accept="image/*" onchange="previewImg('post-cover-file','post-cover-preview')">
-          <p class="form-hint">Formati supportati: JPG, PNG, WebP. Oppure incolla un URL qui sotto.</p>
+          <label>Aggiungi foto (anche più di una alla volta)</label>
+          <input type="file" id="post-photos-input" accept="image/*" multiple onchange="addPostPhotos(this)">
+          <p class="form-hint">JPG, PNG, WebP. Oppure incolla un URL e premi Aggiungi.</p>
         </div>
-        <div class="form-group">
-          <label>Oppure URL immagine</label>
-          <input type="text" id="post-cover-url" placeholder="https://…" oninput="previewUrl('post-cover-url','post-cover-preview')">
+        <div style="display:flex; gap:10px; align-items:center; margin-bottom:20px;">
+          <input type="text" id="post-photo-url-input" placeholder="https://… (URL immagine)" style="background:var(--stone); border:1px solid var(--stone-light); color:var(--cream); font-family:'Cormorant Garamond',serif; font-size:16px; padding:10px 14px; outline:none; flex:1;">
+          <button class="btn btn-outline" style="white-space:nowrap;" onclick="addPostPhotoUrl()">+ Aggiungi URL</button>
         </div>
-        <div class="img-preview-area" id="post-cover-preview"></div>
+        <div id="post-photos-gallery" style="display:flex; flex-wrap:wrap; gap:12px; min-height:0;"></div>
       </div>
       <div class="form-section">
         <div class="form-section-title">Pubblicazione</div>
@@ -391,6 +406,101 @@ body { background: var(--stone); color: var(--text-body); font-family: 'Cormoran
       </div>
     </div>
 
+    <!-- ── PROFILO AUTORE ── -->
+    <div class="admin-panel" id="panel-autore">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Profilo Autore</h1>
+          <p class="page-subtitle">Modifica la sezione autore visibile nella sidebar del blog.</p>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">Informazioni</div>
+        <div class="form-group">
+          <label>Nome autore</label>
+          <input type="text" id="author-name" placeholder="Fabio Bisesti">
+        </div>
+        <div class="form-group">
+          <label>Bio / Descrizione</label>
+          <textarea id="author-bio" style="min-height:120px;" placeholder="Descrizione breve che appare nella sidebar del blog…"></textarea>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">Foto profilo</div>
+        <div class="form-group">
+          <label>Carica foto</label>
+          <input type="file" id="author-photo-file" accept="image/*" onchange="previewImg('author-photo-file','author-photo-preview')">
+          <p class="form-hint">Consigliato: immagine quadrata. Verrà mostrata circolare nella sidebar.</p>
+        </div>
+        <div class="form-group">
+          <label>Oppure URL foto</label>
+          <input type="text" id="author-photo-url" placeholder="https://…" oninput="previewUrl('author-photo-url','author-photo-preview')">
+        </div>
+        <div class="img-preview-area" id="author-photo-preview" style="max-width:120px;"></div>
+      </div>
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="saveAuthor()">💾 Salva Profilo</button>
+        <button class="btn btn-outline" onclick="loadAuthorForm()">↺ Ricarica</button>
+      </div>
+    </div>
+
+    <!-- ── DOWNLOAD ── -->
+    <div class="admin-panel" id="panel-downloads">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Download</h1>
+          <p class="page-subtitle">Aggiungi file scaricabili alla sezione Download del blog.</p>
+        </div>
+        <button class="btn btn-primary" onclick="showAddDownloadForm()">+ Aggiungi file</button>
+      </div>
+
+      <!-- Form aggiunta/modifica -->
+      <div id="download-form-wrap" style="display:none;">
+        <div class="form-section">
+          <div class="form-section-title" id="download-form-section-title">Nuovo file</div>
+          <input type="hidden" id="edit-download-id" value="">
+          <div class="form-group">
+            <label>Nome / Titolo *</label>
+            <input type="text" id="dl-name" placeholder="es. Capitolo di anteprima, Scheda personaggi…">
+          </div>
+          <div class="form-group">
+            <label>Descrizione</label>
+            <textarea id="dl-description" style="min-height:100px;" placeholder="Breve descrizione del file…"></textarea>
+          </div>
+          <div class="form-group">
+            <label>URL del file (link diretto al download)</label>
+            <input type="text" id="dl-file-url" placeholder="https://… (.pdf, .zip, .docx, ecc.)">
+            <p class="form-hint">Inserisci l'URL pubblico del file che vuoi rendere scaricabile.</p>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Immagine di anteprima</div>
+          <div class="form-group">
+            <label>Carica immagine</label>
+            <input type="file" id="dl-photo-file" accept="image/*" onchange="previewImg('dl-photo-file','dl-photo-preview')">
+          </div>
+          <div class="form-group">
+            <label>Oppure URL immagine</label>
+            <input type="text" id="dl-photo-url" placeholder="https://…" oninput="previewUrl('dl-photo-url','dl-photo-preview')">
+          </div>
+          <div class="img-preview-area" id="dl-photo-preview"></div>
+        </div>
+        <div style="display:flex; gap:14px; flex-wrap:wrap; margin-bottom:40px;">
+          <button class="btn btn-primary" onclick="saveDownload()">💾 Salva</button>
+          <button class="btn btn-outline" onclick="hideDownloadForm()">Annulla</button>
+        </div>
+      </div>
+
+      <!-- Lista file -->
+      <div class="form-section" style="padding:0; overflow:hidden;">
+        <table class="data-table" id="all-downloads-table">
+          <thead><tr><th>Anteprima</th><th>Nome</th><th>Descrizione</th><th>Azioni</th></tr></thead>
+          <tbody id="all-downloads-body"></tbody>
+        </table>
+        <div id="all-downloads-empty" style="display:none; padding:32px; text-align:center; font-style:italic;">Nessun file ancora. <button class="btn btn-outline btn-sm" onclick="showAddDownloadForm()" style="margin-left:12px;">Aggiungi il primo</button></div>
+      </div>
+    </div>
+
     <!-- ── IMPOSTAZIONI ── -->
     <div class="admin-panel" id="panel-settings">
       <div class="page-header">
@@ -455,6 +565,10 @@ function setPosts(d) { localStorage.setItem('fabio_posts', JSON.stringify(d)); }
 function getBooks() { try { return JSON.parse(localStorage.getItem('fabio_books') || '[]'); } catch(e){ return []; } }
 function setBooks(d) { localStorage.setItem('fabio_books', JSON.stringify(d)); }
 function getSettings() { try { return JSON.parse(localStorage.getItem('fabio_settings') || '{}'); } catch(e){ return {}; } }
+function getAuthor() { try { return JSON.parse(localStorage.getItem('fabio_author') || 'null'); } catch(e){ return null; } }
+function setAuthor(d) { localStorage.setItem('fabio_author', JSON.stringify(d)); }
+function getDownloads() { try { return JSON.parse(localStorage.getItem('fabio_downloads') || '[]'); } catch(e){ return []; } }
+function setDownloads(d) { localStorage.setItem('fabio_downloads', JSON.stringify(d)); }
 function saveSettings() {
   const s = { fbAuto: document.getElementById('setting-fb-auto').checked, blogUrl: document.getElementById('setting-blog-url').value };
   localStorage.setItem('fabio_settings', JSON.stringify(s));
@@ -475,10 +589,10 @@ function showPanel(id) {
   document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.sidebar-nav-item').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-' + id).classList.add('active');
-  const map = { dashboard: 0, 'new-post': 1, posts: 2, 'new-book': 3, books: 4, settings: 5 };
+  const map = { dashboard: 0, 'new-post': 1, posts: 2, 'new-book': 3, books: 4, autore: 5, downloads: 6, settings: 7 };
   const items = document.querySelectorAll('.sidebar-nav-item');
   if (items[map[id]]) items[map[id]].classList.add('active');
-  const renders = { dashboard: renderDashboard, posts: renderAllPosts, books: renderAllBooks, settings: loadSettings };
+  const renders = { dashboard: renderDashboard, posts: renderAllPosts, books: renderAllBooks, settings: loadSettings, autore: loadAuthorForm, downloads: renderAllDownloads };
   if (renders[id]) renders[id]();
 }
 
@@ -523,6 +637,49 @@ function getImgValue(previewId, urlInputId) {
   return url || '';
 }
 
+// ── POST PHOTOS GALLERY ──
+let postPhotos = []; // array of { src: base64orUrl, name: string }
+
+function renderPostPhotosGallery() {
+  const wrap = document.getElementById('post-photos-gallery');
+  if (postPhotos.length === 0) { wrap.innerHTML = ''; return; }
+  wrap.innerHTML = postPhotos.map((p, i) => `
+    <div class="photo-thumb-wrap">
+      <img src="${escAttr(p.src)}" onerror="this.style.opacity=0.3">
+      ${i === 0 ? '<span class="photo-thumb-badge">Copertina</span>' : ''}
+      <button class="photo-thumb-remove" onclick="removePostPhoto(${i})" title="Rimuovi">✕</button>
+      <div class="photo-thumb-label">${escHtml(p.name || '')}</div>
+    </div>`).join('');
+}
+
+function addPostPhotos(input) {
+  const files = Array.from(input.files);
+  let loaded = 0;
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      postPhotos.push({ src: e.target.result, name: file.name });
+      loaded++;
+      if (loaded === files.length) renderPostPhotosGallery();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function addPostPhotoUrl() {
+  const url = document.getElementById('post-photo-url-input').value.trim();
+  if (!url) return;
+  postPhotos.push({ src: url, name: url.split('/').pop().substring(0, 20) });
+  document.getElementById('post-photo-url-input').value = '';
+  renderPostPhotosGallery();
+}
+
+function removePostPhoto(idx) {
+  postPhotos.splice(idx, 1);
+  renderPostPhotosGallery();
+}
+
 // ── SAVE POST ──
 function savePost() {
   const title = document.getElementById('post-title').value.trim();
@@ -532,7 +689,8 @@ function savePost() {
   const dateVal = document.getElementById('post-date').value;
   const published = document.getElementById('post-published').checked;
   const shareFb = document.getElementById('post-share-fb').checked;
-  const coverImg = getImgValue('post-cover-preview', 'post-cover-url');
+  const coverImg = postPhotos.length > 0 ? postPhotos[0].src : '';
+  const photos = postPhotos.map(p => p.src);
   const editId = document.getElementById('edit-post-id').value;
 
   const posts = getPosts();
@@ -542,12 +700,12 @@ function savePost() {
   if (editId) {
     const idx = posts.findIndex(p => p.id === editId);
     if (idx !== -1) {
-      posts[idx] = { ...posts[idx], title, body, category, date: dateVal || posts[idx].date, published, coverImg };
+      posts[idx] = { ...posts[idx], title, body, category, date: dateVal || posts[idx].date, published, coverImg, photos };
       setPosts(posts);
       showToast('Post aggiornato con successo!', 'success');
     }
   } else {
-    const post = { id: uid(), title, body, category, date: dateVal || new Date().toISOString(), published, coverImg };
+    const post = { id: uid(), title, body, category, date: dateVal || new Date().toISOString(), published, coverImg, photos };
     posts.unshift(post);
     setPosts(posts);
     showToast(published ? 'Post pubblicato!' : 'Bozza salvata.', 'success');
@@ -572,10 +730,9 @@ function resetPostForm() {
   document.getElementById('post-body').innerHTML = '';
   document.getElementById('post-published').checked = true;
   document.getElementById('post-share-fb').checked = false;
-  document.getElementById('post-cover-url').value = '';
-  document.getElementById('post-cover-preview').innerHTML = '';
-  document.getElementById('post-cover-preview').dataset.base64 = '';
-  if (document.getElementById('post-cover-file')) document.getElementById('post-cover-file').value = '';
+  document.getElementById('post-photo-url-input').value = '';
+  postPhotos = [];
+  renderPostPhotosGallery();
 }
 
 // ── EDIT POST ──
@@ -590,12 +747,15 @@ function editPost(id) {
   document.getElementById('post-date').value = post.date ? post.date.split('T')[0] : '';
   document.getElementById('post-body').innerHTML = post.body || '';
   document.getElementById('post-published').checked = post.published !== false;
-  if (post.coverImg) {
-    document.getElementById('post-cover-url').value = post.coverImg.startsWith('data:') ? '' : post.coverImg;
-    const prev = document.getElementById('post-cover-preview');
-    prev.innerHTML = `<img src="${escAttr(post.coverImg)}" alt="">`;
-    if (post.coverImg.startsWith('data:')) prev.dataset.base64 = post.coverImg;
+  // Ripopola galleria foto
+  if (post.photos && post.photos.length > 0) {
+    postPhotos = post.photos.map((src, i) => ({ src, name: i === 0 ? 'copertina' : 'foto ' + (i + 1) }));
+  } else if (post.coverImg) {
+    postPhotos = [{ src: post.coverImg, name: 'copertina' }];
+  } else {
+    postPhotos = [];
   }
+  renderPostPhotosGallery();
 }
 
 // ── DELETE POST ──
@@ -675,6 +835,114 @@ function deleteBook(id) {
     showToast('Libro eliminato.', 'success'); closeConfirm();
   };
   document.getElementById('confirm-overlay').classList.add('open');
+}
+
+// ── AUTHOR ──
+function loadAuthorForm() {
+  const author = getAuthor();
+  document.getElementById('author-name').value = author ? (author.name || '') : '';
+  document.getElementById('author-bio').value = author ? (author.bio || '') : '';
+  const prev = document.getElementById('author-photo-preview');
+  prev.dataset.base64 = '';
+  document.getElementById('author-photo-url').value = '';
+  if (author && author.photo) {
+    prev.innerHTML = `<img src="${escAttr(author.photo)}" alt="">`;
+    if (author.photo.startsWith('data:')) prev.dataset.base64 = author.photo;
+    else document.getElementById('author-photo-url').value = author.photo;
+  } else { prev.innerHTML = ''; }
+}
+function saveAuthor() {
+  const name = document.getElementById('author-name').value.trim();
+  const bio = document.getElementById('author-bio').value.trim();
+  const photo = getImgValue('author-photo-preview', 'author-photo-url');
+  setAuthor({ name, bio, photo });
+  showToast('Profilo autore salvato!', 'success');
+}
+
+// ── DOWNLOADS ──
+function showAddDownloadForm() {
+  document.getElementById('edit-download-id').value = '';
+  document.getElementById('download-form-section-title').textContent = 'Nuovo file';
+  document.getElementById('dl-name').value = '';
+  document.getElementById('dl-description').value = '';
+  document.getElementById('dl-file-url').value = '';
+  document.getElementById('dl-photo-url').value = '';
+  document.getElementById('dl-photo-preview').innerHTML = '';
+  document.getElementById('dl-photo-preview').dataset.base64 = '';
+  if (document.getElementById('dl-photo-file')) document.getElementById('dl-photo-file').value = '';
+  document.getElementById('download-form-wrap').style.display = '';
+  document.getElementById('download-form-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function hideDownloadForm() {
+  document.getElementById('download-form-wrap').style.display = 'none';
+}
+function saveDownload() {
+  const name = document.getElementById('dl-name').value.trim();
+  if (!name) { showToast('Inserisci un nome per il file.', 'error'); return; }
+  const description = document.getElementById('dl-description').value.trim();
+  const fileUrl = document.getElementById('dl-file-url').value.trim();
+  const photo = getImgValue('dl-photo-preview', 'dl-photo-url');
+  const editId = document.getElementById('edit-download-id').value;
+  const downloads = getDownloads();
+  if (editId) {
+    const idx = downloads.findIndex(d => d.id === editId);
+    if (idx !== -1) { downloads[idx] = { ...downloads[idx], name, description, fileUrl, photo }; setDownloads(downloads); showToast('File aggiornato!', 'success'); }
+  } else {
+    downloads.push({ id: uid(), name, description, fileUrl, photo });
+    setDownloads(downloads); showToast('File aggiunto!', 'success');
+  }
+  hideDownloadForm();
+  renderAllDownloads();
+}
+function editDownload(id) {
+  const dl = getDownloads().find(d => d.id === id);
+  if (!dl) return;
+  document.getElementById('edit-download-id').value = id;
+  document.getElementById('download-form-section-title').textContent = 'Modifica file';
+  document.getElementById('dl-name').value = dl.name || '';
+  document.getElementById('dl-description').value = dl.description || '';
+  document.getElementById('dl-file-url').value = dl.fileUrl || '';
+  const prev = document.getElementById('dl-photo-preview');
+  prev.dataset.base64 = '';
+  document.getElementById('dl-photo-url').value = '';
+  if (dl.photo) {
+    prev.innerHTML = `<img src="${escAttr(dl.photo)}" alt="">`;
+    if (dl.photo.startsWith('data:')) prev.dataset.base64 = dl.photo;
+    else document.getElementById('dl-photo-url').value = dl.photo;
+  } else { prev.innerHTML = ''; }
+  document.getElementById('download-form-wrap').style.display = '';
+  document.getElementById('download-form-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function deleteDownload(id) {
+  document.getElementById('confirm-title').textContent = 'Elimina file';
+  document.getElementById('confirm-msg').textContent = 'Sei sicuro di voler eliminare questo file dalla sezione Download?';
+  document.getElementById('confirm-yes').onclick = () => {
+    const downloads = getDownloads().filter(d => d.id !== id);
+    setDownloads(downloads); renderAllDownloads();
+    showToast('File eliminato.', 'success'); closeConfirm();
+  };
+  document.getElementById('confirm-overlay').classList.add('open');
+}
+function renderAllDownloads() {
+  const downloads = getDownloads();
+  const body = document.getElementById('all-downloads-body');
+  const empty = document.getElementById('all-downloads-empty');
+  if (downloads.length === 0) { body.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  body.innerHTML = downloads.map(d => {
+    const thumb = d.photo
+      ? `<img src="${escAttr(d.photo)}" alt="" style="width:60px; height:44px; object-fit:cover; border:1px solid var(--stone-light);" onerror="this.style.opacity=0.3">`
+      : `<div style="width:60px; height:44px; background:var(--stone-light); display:flex; align-items:center; justify-content:center; font-size:18px;">⬇</div>`;
+    return `<tr>
+      <td>${thumb}</td>
+      <td><div class="post-row-title">${escHtml(d.name)}</div></td>
+      <td style="max-width:220px; font-size:14px; color:var(--text-body);">${escHtml((d.description||'').substring(0,80))}${(d.description||'').length > 80 ? '…' : ''}</td>
+      <td><div class="action-group">
+        <button class="btn btn-outline btn-sm" onclick="editDownload('${d.id}')">Modifica</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteDownload('${d.id}')">Elimina</button>
+      </div></td>
+    </tr>`;
+  }).join('');
 }
 
 // ── RENDER DASHBOARD ──
@@ -806,6 +1074,7 @@ function updateCatSuggestions() {
 document.getElementById('post-date').value = new Date().toISOString().split('T')[0];
 renderDashboard();
 updateCatSuggestions();
+renderAllDownloads();
 
 // Seed initial data if empty
 if (getPosts().length === 0) {
