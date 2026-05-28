@@ -512,30 +512,26 @@ const DATA_URL = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO
 
 // ── STATE ──
 let _posts = [], _books = [], _author = {}, _downloads = [];
-let _dataLoaded = false;
-
-// ── LOAD DATA FROM GITHUB ──
+// ── LOAD DATA FROM GITHUB (identico a OLD.html) ──
 async function loadData() {
   try {
     const res = await fetch(DATA_URL + '?v=' + Date.now());
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    if (!res.ok) throw new Error(`HTTP ${res.status} – assicurati che data.json sia pubblico e che GITHUB_USER/GITHUB_REPO siano corretti.`);
     const data = await res.json();
     _posts     = data.posts     || [];
     _books     = data.books     || [];
     _author    = data.author    || {};
     _downloads = data.downloads || [];
-    _dataLoaded = true;
+    renderPosts();
+    renderAuthorSidebar();
   } catch(e) {
-    console.warn('GitHub fetch failed, fallback localStorage:', e.message);
-    // fallback a localStorage se disponibile
-    try { _posts     = JSON.parse(localStorage.getItem('fabio_posts')     || '[]'); } catch(x){}
-    try { _books     = JSON.parse(localStorage.getItem('fabio_books')     || '[]'); } catch(x){}
-    try { _author    = JSON.parse(localStorage.getItem('fabio_author')    || '{}'); } catch(x){}
-    try { _downloads = JSON.parse(localStorage.getItem('fabio_downloads') || '[]'); } catch(x){}
-    _dataLoaded = true;
+    document.getElementById('posts-container').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">✕</div>
+        <div class="empty-title">Errore nel caricamento</div>
+        <p class="empty-text">${e.message}</p>
+      </div>`;
   }
-  renderPosts();
-  renderAuthorSidebar();
 }
 
 // ── HELPERS ──
