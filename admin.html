@@ -223,9 +223,9 @@ body { background: var(--stone); color: var(--text-body); font-family: 'Cormoran
     <button class="sidebar-nav-item" onclick="showPanel('settings')">
       <span class="sidebar-icon">⚙</span> Impostazioni
     </button>
-    <a href="config.html" class="sidebar-nav-item">
-      <span class="sidebar-icon">🌐</span> configura repository e pubblica
-    </a>
+    <button class="sidebar-nav-item" onclick="showPanel('github')">
+      <span class="sidebar-icon">🌐</span> GitHub / Pubblica
+    </button>
   </aside>
 
   <main class="admin-main">
@@ -543,6 +543,49 @@ body { background: var(--stone); color: var(--text-body); font-family: 'Cormoran
       </div>
     </div>
 
+    <!-- ── GITHUB ── -->
+    <div class="admin-panel" id="panel-github">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">GitHub / Pubblica</h1>
+          <p class="page-subtitle">Sincronizza i contenuti su GitHub Pages.</p>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">Configurazione Repository</div>
+        <p style="font-size:15px; margin-bottom:20px; line-height:1.8;">
+          Inserisci le credenziali del tuo repository GitHub. Il token viene salvato solo nel browser (localStorage) e non viene mai inviato a terzi.<br>
+          Per creare un token: GitHub → Settings → Developer Settings → Personal Access Tokens → Tokens (classic) → seleziona permesso <strong style="color:var(--cream);">repo</strong>.
+        </p>
+        <div class="form-group">
+          <label>Username GitHub</label>
+          <input type="text" id="gh-owner" placeholder="es: fabioscrive">
+        </div>
+        <div class="form-group">
+          <label>Nome Repository</label>
+          <input type="text" id="gh-repo" placeholder="es: mio-sito">
+        </div>
+        <div class="form-group">
+          <label>Branch (di solito: main)</label>
+          <input type="text" id="gh-branch" placeholder="main" value="main">
+        </div>
+        <div class="form-group">
+          <label>Personal Access Token (PAT)</label>
+          <input type="password" id="gh-token" placeholder="ghp_…">
+          <p class="form-hint">Il token viene salvato solo nel tuo browser, non viene mai inviato ad altri server.</p>
+        </div>
+        <button class="btn btn-outline" onclick="saveGHConfig()">💾 Salva configurazione</button>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">Pubblica su GitHub</div>
+        <p style="font-size:15px; margin-bottom:20px; line-height:1.8;">
+          Clicca il bottone per caricare tutti i contenuti (post, libri, immagini incluse) su GitHub come file <code style="color:var(--gold-dark);">data.json</code>. Il file sarà accessibile pubblicamente da <code style="color:var(--gold-dark);">index.html</code>.
+        </p>
+        <div id="gh-status" style="display:none; padding:12px 16px; margin-bottom:20px; font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:0.15em;"></div>
+        <button class="btn btn-primary" onclick="syncWithGithub()" id="gh-sync-btn">🚀 PUBBLICA SU GITHUB</button>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -592,10 +635,10 @@ function showPanel(id) {
   document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.sidebar-nav-item').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-' + id).classList.add('active');
-  const map = { dashboard: 0, 'new-post': 1, posts: 2, 'new-book': 3, books: 4, autore: 5, downloads: 6, settings: 7 };
+  const map = { dashboard: 0, 'new-post': 1, posts: 2, 'new-book': 3, books: 4, autore: 5, downloads: 6, settings: 7, github: 8 };
   const items = document.querySelectorAll('.sidebar-nav-item');
   if (items[map[id]]) items[map[id]].classList.add('active');
-  const renders = { dashboard: renderDashboard, posts: renderAllPosts, books: renderAllBooks, settings: loadSettings, autore: loadAuthorForm, downloads: renderAllDownloads };
+  const renders = { dashboard: renderDashboard, posts: renderAllPosts, books: renderAllBooks, settings: loadSettings, autore: loadAuthorForm, downloads: renderAllDownloads, github: loadGHConfig };
   if (renders[id]) renders[id]();
 }
 
@@ -1074,7 +1117,112 @@ function updateCatSuggestions() {
   dl.innerHTML = cats.map(c => `<option value="${escAttr(c)}">`).join('');
 }
 
-// ── INIT ──
+
+// ── GITHUB SYNC ──
+function saveGHConfig() {
+  const config = {
+    owner: document.getElementById('gh-owner').value.trim(),
+    repo: document.getElementById('gh-repo').value.trim(),
+    branch: document.getElementById('gh-branch').value.trim() || 'main',
+    token: document.getElementById('gh-token').value.trim()
+  };
+  if (!config.owner || !config.repo || !config.token) {
+    showToast('Compila tutti i campi GitHub prima di salvare.', 'error'); return;
+  }
+  localStorage.setItem('fabio_gh_config', JSON.stringify(config));
+  showToast('Configurazione GitHub salvata!', 'success');
+}
+
+function loadGHConfig() {
+  const c = JSON.parse(localStorage.getItem('fabio_gh_config') || 'null');
+  if (c) {
+    document.getElementById('gh-owner').value = c.owner || '';
+    document.getElementById('gh-repo').value = c.repo || '';
+    document.getElementById('gh-branch').value = c.branch || 'main';
+    document.getElementById('gh-token').value = c.token || '';
+  }
+}
+
+function ghSetStatus(msg, color) {
+  const el = document.getElementById('gh-status');
+  el.style.display = '';
+  el.style.background = color === 'ok' ? 'rgba(42,138,86,0.15)' : color === 'err' ? 'rgba(139,32,32,0.2)' : 'rgba(61,55,48,0.6)';
+  el.style.borderLeft = '3px solid ' + (color === 'ok' ? '#2a8a56' : color === 'err' ? '#8b2020' : 'var(--gold-dark)');
+  el.style.color = color === 'ok' ? '#4dba84' : color === 'err' ? '#e07070' : 'var(--cream-dark)';
+  el.textContent = msg;
+}
+
+async function syncWithGithub() {
+  const config = JSON.parse(localStorage.getItem('fabio_gh_config') || 'null');
+  if (!config || !config.token || !config.owner || !config.repo) {
+    showToast('Configura prima le credenziali GitHub in questa pagina.', 'error'); return;
+  }
+
+  const btn = document.getElementById('gh-sync-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Pubblicazione in corso…';
+  ghSetStatus('Connessione a GitHub in corso…', 'loading');
+
+  const data = {
+    posts: getPosts(),
+    books: getBooks(),
+    author: getAuthor() || {},
+    downloads: getDownloads(),
+    lastUpdated: new Date().toISOString()
+  };
+
+  const branch = config.branch || 'main';
+  const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/data.json`;
+  const headers = {
+    'Authorization': `token ${config.token}`,
+    'Content-Type': 'application/json',
+    'Accept': 'application/vnd.github.v3+json'
+  };
+
+  try {
+    // Get existing SHA if file exists
+    let sha = '';
+    const getRes = await fetch(url + `?ref=${branch}`, { headers });
+    if (getRes.ok) {
+      const existing = await getRes.json();
+      sha = existing.sha;
+    } else if (getRes.status !== 404) {
+      const err = await getRes.json();
+      throw new Error(err.message || 'Errore lettura file');
+    }
+
+    // Encode content
+    const jsonString = JSON.stringify(data, null, 2);
+    // btoa with utf-8 support
+    const encoded = btoa(unescape(encodeURIComponent(jsonString)));
+
+    const body = { message: 'Aggiornamento contenuti', content: encoded, branch };
+    if (sha) body.sha = sha;
+
+    ghSetStatus('Caricamento dati…', 'loading');
+    const putRes = await fetch(url, { method: 'PUT', headers, body: JSON.stringify(body) });
+
+    if (putRes.ok) {
+      ghSetStatus('✓ Pubblicazione completata! Il sito sarà aggiornato entro qualche secondo.', 'ok');
+      showToast('Pubblicato su GitHub con successo!', 'success');
+    } else {
+      const err = await putRes.json();
+      throw new Error(err.message || 'Errore durante upload');
+    }
+  } catch(e) {
+    console.error(e);
+    ghSetStatus('✗ Errore: ' + e.message, 'err');
+    showToast('Errore GitHub: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 PUBBLICA SU GITHUB';
+  }
+}
+
+// Carica config GitHub all'avvio se già sul pannello
+loadGHConfig();
+
+
 document.getElementById('post-date').value = new Date().toISOString().split('T')[0];
 renderDashboard();
 updateCatSuggestions();
