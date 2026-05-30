@@ -418,7 +418,7 @@ footer p { font-size: 13px; color: rgba(200,191,168,0.25); letter-spacing: 0.06e
   <div class="hero-rule"></div>
   <div class="site-header-label">Il blog di Fabio Bisesti</div>
   <h1>Fabio <em>Scrive</em></h1>
-  <p>Parole, storie e riflessioni da dietro le lenti concave di un miope narratore.</p>
+  <p>Parole, storie e riflessioni dal tavolo di un narratore.</p>
   <div class="hero-ornament"><span>✦</span></div>
   <div class="visit-counter">
     <span>Visite</span>
@@ -527,6 +527,14 @@ footer p { font-size: 13px; color: rgba(200,191,168,0.25); letter-spacing: 0.06e
     <a href="#" onclick="showTab('download', event)">Download</a>
     <a href="#" onclick="showTab('autore', event)">Chi Sono</a>
   </div>
+  <div class="footer-social" style="display:flex;justify-content:center;gap:20px;margin-bottom:20px;">
+    <a href="https://www.tiktok.com/@fabio.scrive" target="_blank" rel="noopener" aria-label="TikTok" style="color:var(--cream-dark);transition:color .2s,transform .2s;opacity:.7;" onmouseover="this.style.color='var(--gold)';this.style.opacity='1';this.style.transform='translateY(-2px)'" onmouseout="this.style.color='var(--cream-dark)';this.style.opacity='.7';this.style.transform='none'">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78 2.87 2.87 0 0 1 1.22.28V9.4a6.37 6.37 0 0 0-1.22-.12A6.18 6.18 0 0 0 4 15.48a6.18 6.18 0 0 0 6.18 6.18 6.19 6.19 0 0 0 6.18-6.18V8.92a8.15 8.15 0 0 0 4.78 1.53V6.85a4.82 4.82 0 0 1-1.55-.16z"/></svg>
+    </a>
+    <a href="https://www.instagram.com/fabio.scrive/" target="_blank" rel="noopener" aria-label="Instagram" style="color:var(--cream-dark);transition:color .2s,transform .2s;opacity:.7;" onmouseover="this.style.color='var(--gold)';this.style.opacity='1';this.style.transform='translateY(-2px)'" onmouseout="this.style.color='var(--cream-dark)';this.style.opacity='.7';this.style.transform='none'">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+    </a>
+  </div>
   <p>© 2025 Fabio Bisesti · Tutti i diritti riservati</p>
 </footer>
 
@@ -583,9 +591,21 @@ function showTab(tab, e) {
 }
 
 // ── FACEBOOK SHARE ──
-function fbShare(url, title) {
+function fbShare(url, title, img) {
   const shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url || window.location.href) + '&quote=' + encodeURIComponent(title || document.title);
-  window.open(shareUrl, '_blank', 'width=600,height=400');
+  // Open Facebook sharer; for proper image preview the og:image meta must be set server-side.
+  // We open the sharer and also trigger a native share if image is available (mobile).
+  if (img && navigator.share) {
+    navigator.share({
+      title: title || document.title,
+      text: title || document.title,
+      url: url || window.location.href
+    }).catch(() => {
+      window.open(shareUrl, '_blank', 'width=600,height=400');
+    });
+  } else {
+    window.open(shareUrl, '_blank', 'width=600,height=400');
+  }
 }
 
 // ── RENDER POSTS ──
@@ -642,7 +662,7 @@ function renderPosts(filterCat) {
       <p class="post-excerpt">${escHtml(excerpt)}</p>
       <div class="post-actions">
         <button class="btn-read" onclick="openPost('${post.id}')">Leggi l'articolo</button>
-        <a href="#" class="btn-fb" onclick="fbShare(window.location.href+'#${post.id}','${escAttr(post.title)}');return false;">
+        <a href="#" class="btn-fb" onclick="fbShare(window.location.href+'#${post.id}','${escAttr(post.title)}','${escAttr(post.coverImg||'')}');return false;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           Condividi
         </a>
@@ -671,7 +691,7 @@ function openPost(id) {
     <div class="single-body">${post.body||''}</div>
     <div class="single-share">
       <span>Condividi:</span>
-      <a href="#" class="btn-fb" onclick="fbShare(window.location.href+'#${post.id}','${escAttr(post.title)}');return false;">
+      <a href="#" class="btn-fb" onclick="fbShare(window.location.href+'#${post.id}','${escAttr(post.title)}','${escAttr(post.coverImg||'')}');return false;">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         Condividi su Facebook
       </a>
