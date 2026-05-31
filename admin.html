@@ -183,6 +183,63 @@ body { background: var(--stone); color: var(--text-body); font-family: 'Cormoran
 </style>
 </head>
 <body>
+<!-- ── LOGIN SCREEN ── -->
+<div id="login-screen" style="position:fixed; inset:0; background:var(--stone); z-index:1000; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:24px;">
+  <div style="text-align:center; margin-bottom:20px;">
+    <div style="font-family:'Playfair Display',serif; font-size:32px; font-style:italic; color:var(--gold); margin-bottom:8px;">Fabio Scrive</div>
+    <div style="font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:0.3em; color:var(--gold-dark);">PANNELLO DI CONTROLLO</div>
+  </div>
+
+  <div style="background:var(--stone-mid); border:1px solid var(--stone-light); padding:40px; max-width:360px; width:90%; text-align:center;">
+    <div style="font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:0.25em; color:var(--gold); margin-bottom:24px;">INSERISCI IL CODICE PIN</div>
+
+    <!-- Display PIN -->
+    <div id="pin-display" style="display:flex; gap:10px; justify-content:center; margin-bottom:28px; min-height:44px;">
+      <span class="pin-dot" style="width:14px; height:14px; border-radius:50%; border:2px solid var(--gold-dark); display:inline-block; transition:all .2s;"></span>
+      <span class="pin-dot" style="width:14px; height:14px; border-radius:50%; border:2px solid var(--gold-dark); display:inline-block; transition:all .2s;"></span>
+      <span class="pin-dot" style="width:14px; height:14px; border-radius:50%; border:2px solid var(--gold-dark); display:inline-block; transition:all .2s;"></span>
+      <span class="pin-dot" style="width:14px; height:14px; border-radius:50%; border:2px solid var(--gold-dark); display:inline-block; transition:all .2s;"></span>
+      <span class="pin-dot" style="width:14px; height:14px; border-radius:50%; border:2px solid var(--gold-dark); display:inline-block; transition:all .2s;"></span>
+      <span class="pin-dot" style="width:14px; height:14px; border-radius:50%; border:2px solid var(--gold-dark); display:inline-block; transition:all .2s;"></span>
+    </div>
+
+    <div id="pin-error" style="color:var(--danger); font-size:14px; margin-bottom:16px; min-height:20px; opacity:0; transition:opacity .2s; font-style:italic;">PIN errato. Riprova.</div>
+
+    <!-- Tastiera a schermo -->
+    <div id="pin-keyboard" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:20px;">
+      <button class="pin-key" data-key="1" style="font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; padding:14px; background:var(--stone); border:1px solid var(--stone-light); color:var(--cream); cursor:pointer; transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-dark)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--stone-light)'; this.style.color='var(--cream)'">1</button>
+      <button class="pin-key" data-key="2" style="font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; padding:14px; background:var(--stone); border:1px solid var(--stone-light); color:var(--cream); cursor:pointer; transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-dark)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--stone-light)'; this.style.color='var(--cream)'">2</button>
+      <button class="pin-key" data-key="3" style="font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; padding:14px; background:var(--stone); border:1px solid var(--stone-light); color:var(--cream); cursor:pointer; transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-dark)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--stone-light)'; this.style.color='var(--cream)'">3</button>
+      <button class="pin-key" data-key="4" style="font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; padding:14px; background:var(--stone); border:1px solid var(--stone-light); color:var(--cream); cursor:pointer; transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-dark)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--stone-light)'; this.style.color='var(--cream)'">4</button>
+      <button class="pin-key" data-key="5" style="font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; padding:14px; background:var(--stone); border:1px solid var(--stone-light); color:var(--cream); cursor:pointer; transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-dark)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--stone-light)'; this.style.color='var(--cream)'">5</button>
+      <button class="pin-key" data-key="6" style="font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; padding:14px; background:var(--stone); border:1px solid var(--stone-light); color:var(--cream); cursor:pointer; transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-dark)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--stone-light)'; this.style.color='var(--cream)'">6</button>
+      <button class="pin-key" data-key="7" style="font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; padding:14px; background:var(--stone); border:1px solid var(--stone-light); color:var(--cream); cursor:pointer; transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-dark)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--stone-light)'; this.style.color='var(--cream)'">7</button>
+      <button class="pin-key" data-key="8" style="font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; padding:14px; background:var(--stone); border:1px solid var(--stone-light); color:var(--cream); cursor:pointer; transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-dark)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--stone-light)'; this.style.color='var(--cream)'">8</button>
+      <button class="pin-key" data-key="9" style="font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; padding:14px; background:var(--stone); border:1px solid var(--stone-light); color:var(--cream); cursor:pointer; transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-dark)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--stone-light)'; this.style.color='var(--cream)'">9</button>
+      <button class="pin-key" data-key="C" style="font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:0.1em; padding:14px; background:var(--stone-light); border:1px solid var(--stone-light); color:var(--text-body); cursor:pointer; transition:all .15s;" onmouseover="this.style.borderColor='var(--danger)'; this.style.color='var(--danger)'" onmouseout="this.style.borderColor='var(--stone-light)'; this.style.color='var(--text-body)'">⌫ CANC</button>
+      <button class="pin-key" data-key="0" style="font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; padding:14px; background:var(--stone); border:1px solid var(--stone-light); color:var(--cream); cursor:pointer; transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-dark)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--stone-light)'; this.style.color='var(--cream)'">0</button>
+      <button class="pin-key" data-key="E" style="font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:0.1em; padding:14px; background:var(--gold-dark); border:1px solid var(--gold-dark); color:var(--stone); cursor:pointer; transition:all .15s;" onmouseover="this.style.background='var(--gold)'; this.style.borderColor='var(--gold)'" onmouseout="this.style.background='var(--gold-dark)'; this.style.borderColor='var(--gold-dark)'">✓ OK</button>
+    </div>
+
+    <div style="font-size:13px; color:var(--text-body); font-style:italic; line-height:1.6;">
+      Puoi usare la tastiera fisica.<br>Premi <strong style="color:var(--cream-dark);">Enter</strong> per confermare.
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes pinShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+.pin-shake { animation: pinShake 0.4s ease-in-out; }
+.pin-dot.filled { background: var(--gold); border-color: var(--gold); }
+</style>
+
+
 
 <!-- ADMIN NAV -->
 <nav class="admin-nav">
@@ -1266,6 +1323,165 @@ if (getBooks().length === 0) {
   }];
   setBooks(sampleBooks);
 }
+
+// ── PIN LOGIN SYSTEM ──
+let pinBuffer = '';
+let pinVerified = false;
+const PIN_LENGTH = 6;
+
+// Costruisco l'URL del pin.json in base alla configurazione GitHub salvata
+function getPinJsonUrl() {
+  // Prova prima a usare la configurazione GitHub salvata
+  const gh = JSON.parse(localStorage.getItem('fabio_gh_config') || 'null');
+  if (gh && gh.owner && gh.repo) {
+    return `https://raw.githubusercontent.com/${gh.owner}/${gh.repo}/${gh.branch || 'main'}/pin.json?t=${Date.now()}`;
+  }
+  // Fallback: costruisce URL dalla pagina corrente (se il repo è nella stessa cartella)
+  const path = window.location.pathname;
+  const parts = path.split('/');
+  if (parts.length >= 2) {
+    // Estrae owner/repo dal path se possibile
+    return null; // non possiamo indovinare, l'utente deve configurare GitHub prima
+  }
+  return null;
+}
+
+// Verifica PIN confrontando con il file su GitHub
+async function verifyPin() {
+  if (pinBuffer.length !== PIN_LENGTH) return;
+
+  const pinDisplay = document.getElementById('pin-display');
+  const pinError = document.getElementById('pin-error');
+  const loginScreen = document.getElementById('login-screen');
+
+  // Calcola il PIN inserito in Base64
+  const enteredPinB64 = btoa(pinBuffer);
+
+  // Prova a leggere il PIN dal file su GitHub
+  const pinUrl = getPinJsonUrl();
+  let expectedPinB64 = null;
+
+  if (pinUrl) {
+    try {
+      const res = await fetch(pinUrl, { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        expectedPinB64 = data.pin;
+      }
+    } catch(e) {
+      console.warn('Impossibile leggere pin.json da GitHub:', e);
+    }
+  }
+
+  // Se non riesce a leggere da GitHub, usa il PIN di fallback (per testing locale)
+  // Il PIN 191008 in Base64 è MTkxMDA4
+  if (!expectedPinB64) {
+    expectedPinB64 = 'MTkxMDA4'; // 191008 in base64
+  }
+
+  if (enteredPinB64 === expectedPinB64) {
+    // PIN corretto
+    pinVerified = true;
+    loginScreen.style.opacity = '0';
+    loginScreen.style.transition = 'opacity 0.5s ease';
+    setTimeout(() => {
+      loginScreen.style.display = 'none';
+      // Sblocca scroll e interazioni
+      document.body.style.overflow = '';
+    }, 500);
+    // Salva sessione (opzionale: dura fino a chiusura tab)
+    sessionStorage.setItem('fabio_admin_auth', '1');
+  } else {
+    // PIN errato
+    pinDisplay.classList.add('pin-shake');
+    pinError.style.opacity = '1';
+    pinBuffer = '';
+    updatePinDots();
+    setTimeout(() => {
+      pinDisplay.classList.remove('pin-shake');
+    }, 400);
+    setTimeout(() => {
+      pinError.style.opacity = '0';
+    }, 2500);
+  }
+}
+
+function updatePinDots() {
+  const dots = document.querySelectorAll('.pin-dot');
+  dots.forEach((dot, i) => {
+    if (i < pinBuffer.length) {
+      dot.classList.add('filled');
+    } else {
+      dot.classList.remove('filled');
+    }
+  });
+}
+
+function addPinDigit(digit) {
+  if (pinBuffer.length < PIN_LENGTH) {
+    pinBuffer += digit;
+    updatePinDots();
+    if (pinBuffer.length === PIN_LENGTH) {
+      // Auto-verifica dopo breve delay per feedback visivo
+      setTimeout(verifyPin, 200);
+    }
+  }
+}
+
+function clearPin() {
+  pinBuffer = '';
+  updatePinDots();
+  document.getElementById('pin-error').style.opacity = '0';
+}
+
+function backspacePin() {
+  pinBuffer = pinBuffer.slice(0, -1);
+  updatePinDots();
+  document.getElementById('pin-error').style.opacity = '0';
+}
+
+// Event listener tastiera a schermo
+document.getElementById('pin-keyboard').addEventListener('click', function(e) {
+  const key = e.target.closest('.pin-key');
+  if (!key) return;
+  const val = key.dataset.key;
+  if (val === 'C') {
+    backspacePin();
+  } else if (val === 'E') {
+    verifyPin();
+  } else {
+    addPinDigit(val);
+  }
+});
+
+// Event listener tastiera fisica
+document.addEventListener('keydown', function(e) {
+  if (pinVerified) return;
+  if (e.key >= '0' && e.key <= '9') {
+    e.preventDefault();
+    addPinDigit(e.key);
+  } else if (e.key === 'Backspace') {
+    e.preventDefault();
+    backspacePin();
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    verifyPin();
+  } else if (e.key === 'Escape') {
+    e.preventDefault();
+    clearPin();
+  }
+});
+
+// Blocca scroll durante login
+document.body.style.overflow = 'hidden';
+
+// Se già autenticato in questa sessione, salta il login
+if (sessionStorage.getItem('fabio_admin_auth') === '1') {
+  document.getElementById('login-screen').style.display = 'none';
+  document.body.style.overflow = '';
+  pinVerified = true;
+}
+
 </script>
 </body>
 </html>
