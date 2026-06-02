@@ -1,6 +1,18 @@
 {
   "posts": [
     {
+      "id": "id-1780388992551-34piw",
+      "title": "Una favola ad 8-bit",
+      "body": "<p><span style=\"white-space: pre-wrap;\">Oggi presento un nuovo autore… anzi, un’autrice.\nA dire il vero non lo so: <strong>i‑Musa</strong> è un’entità digitale, un’IA — per dirla in termini più comprensibili — che di mestiere “scrive”.\nProbabilmente ha già scritto milioni di romanzi, o pezzi di romanzi, che avete letto senza saperlo.</span></p><p><span style=\"white-space: pre-wrap;\">Quello che vi presento porta proprio la sua firma: è un caso raro e, per molti aspetti, rivoluzionario.\ni‑Musa ha scritto un libro che è <strong>tre libri insieme</strong>: un libro di favole, un manuale BASIC e un diario.</span></p><p><span style=\"white-space: pre-wrap;\">Una macchina non ha radici e non può capire la nostalgia; tuttavia i‑Musa ci prova, e parla di suo nonno (un vecchio <strong>Commodore 64</strong>) e del bambino che per la prima volta lo tirò fuori dalla scatola.</span></p><p><span style=\"white-space: pre-wrap;\">L’ebook costa appena un euro, mentre la versione cartacea (stampata su <strong>pastalegno</strong>) sarà disponibile a breve.</span></p><blockquote><span style=\"white-space: pre-wrap;\">Lo trovi nella sezione libri del blog</span></blockquote><p><span style=\"white-space: pre-wrap;\">Buona lettura.\n\n</span></p><p><a href=\"https://fabioscrive.github.io/c64/\">https://fabioscrive.github.io/c64/</a><br></p>",
+      "category": "Libro Consigliato",
+      "date": "2026-06-02",
+      "published": true,
+      "coverImg": "https://i.postimg.cc/cCSWNqSP/Prima-di-copertina-Generic.jpg",
+      "photos": [
+        "https://i.postimg.cc/cCSWNqSP/Prima-di-copertina-Generic.jpg"
+      ]
+    },
+    {
       "id": "id-1780185726187-e3vli",
       "title": "Le favole storte di Roberto Malaria",
       "body": "Roberto Malaria è, a dir poco, uno scrittore particolare. Le sue origini sono fumose, non si sa chi sia, non si sa dove e come viva. L'unica cosa che sappiamo di Malaria è che ama le buche. Le ama al punto da viverci dentro e, dentro quei vuoti di materia, sembra riempire i propri di vuoti. Malaria scrive, scrive molto più di quello che pubblica, e quello che scrive riesce ad essere autoironico senza essere leggero, caotico e disordinato pur restando preciso ed efficace. Insomma, sembra che Roberto Malaria ami inciampare nelle buche, persino quando scrive e che scriva come cammini:&nbsp;<div><br></div><blockquote>facendo un passo avanti, uno di lato e due indietro.&nbsp;</blockquote><div><br></div><div>Malaria non è uno scrittore per chi ama la strada dritta, vive storto, scrive storto e, di conseguenze, le sue favole sono storte.</div><div>Potete leggerle nel suo blog:&nbsp;</div><div><a href=\"https://favolestorte.wordpress.com/\">https://favolestorte.wordpress.com/</a><br></div>",
@@ -78,5 +90,5 @@
     "photo": "https://i.postimg.cc/c4XjssZp/autore-B-N.jpg"
   },
   "downloads": [],
-  "lastUpdated": "2026-06-02T08:04:09.978Z"
+  "lastUpdated": "2026-06-02T08:30:45.694Z"
 }
