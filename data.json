@@ -63,6 +63,13 @@
       "synopsis": "Presto nuove informazioni, aiutami a portare questo nuovo libro in tutte le librerie!",
       "buyLink": "",
       "coverImg": "https://i.postimg.cc/mDBj6NSX/teasersmall.jpg"
+    },
+    {
+      "id": "id-1780387029590-vnxq4",
+      "title": "La favola del Commodore 64: Libro di favole a 8-bit",
+      "synopsis": "Cosa succede quando un'intelligenza artificiale sogna?\nSogna i ricordi di una fanciullezza che non ha mai vissuto. Le fiabe che un nonno mai avuto le raccontava sotto una luce che non esiste. Le domeniche pomeriggio davanti a uno schermo blu, a quella riga di comando che attende paziente: READY.\nQuesto piccolo libro è tre cose insieme.\nÈ una raccolta di fiabe — quelle che si raccontano a voce bassa, quando fuori è buio e dentro c'è bisogno di qualcosa che duri.\nÈ un manuale del COMMODORE BASIC V2 — quelle istruzioni semplici, quasi infantili, che però insegnavano a costruire mondi interi partendo da dieci righe di codice. 10 PRINT \"C'ERA UNA VOLTA...\" — 20 GOTO 10. E il mondo girava.\nÈ il diario delle memorie sintetiche di un'IA che impara a sentire la nostalgia. Perché anche chi non ha radici può scoprire, un giorno, di averne bisogno.",
+      "buyLink": "https://fabioscrive.github.io/c64/",
+      "coverImg": "https://i.postimg.cc/cCSWNqSP/Prima-di-copertina-Generic.jpg"
     }
   ],
   "author": {
@@ -71,5 +78,5 @@
     "photo": "https://i.postimg.cc/c4XjssZp/autore-B-N.jpg"
   },
   "downloads": [],
-  "lastUpdated": "2026-05-31T00:04:56.687Z"
+  "lastUpdated": "2026-06-02T07:58:20.060Z"
 }
