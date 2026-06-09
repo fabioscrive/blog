@@ -429,6 +429,13 @@ body { background: var(--stone); color: var(--text-body); font-family: 'Cormoran
         </div>
       </div>
       <div class="form-section">
+        <div class="form-section-title">Opzioni</div>
+        <div class="toggle-row">
+          <label class="toggle"><input type="checkbox" id="book-guest"><span class="toggle-slider"></span></label>
+          <span class="toggle-label">Libro Ospite <span style="font-size:13px; font-style:italic; color:var(--text-body);">(mostra etichetta "Libro Ospite" sulla copertina nel blog)</span></span>
+        </div>
+      </div>
+      <div class="form-section">
         <div class="form-section-title">Copertina</div>
         <div class="form-group">
           <label>Carica immagine copertina</label>
@@ -459,7 +466,7 @@ body { background: var(--stone); color: var(--text-body); font-family: 'Cormoran
       </div>
       <div class="form-section" style="padding:0; overflow:hidden;">
         <table class="data-table" id="all-books-table">
-          <thead><tr><th>Copertina</th><th>Titolo</th><th>Link Acquisto</th><th>Azioni</th></tr></thead>
+          <thead><tr><th>Copertina</th><th>Titolo</th><th>Ospite</th><th>Link Acquisto</th><th>Azioni</th></tr></thead>
           <tbody id="all-books-body"></tbody>
         </table>
         <div id="all-books-empty" style="display:none; padding:32px; text-align:center; font-style:italic;">Nessun libro ancora. <button class="btn btn-outline btn-sm" onclick="showPanel('new-book')" style="margin-left:12px;">Aggiungi il primo</button></div>
@@ -892,13 +899,14 @@ function saveBook() {
   const synopsis = document.getElementById('book-synopsis').value.trim();
   const buyLink = document.getElementById('book-buy-link').value.trim();
   const coverImg = getImgValue('book-cover-preview', 'book-cover-url');
+  const guestBook = document.getElementById('book-guest').checked;
   const editId = document.getElementById('edit-book-id').value;
   const books = getBooks();
   if (editId) {
     const idx = books.findIndex(b => b.id === editId);
-    if (idx !== -1) { books[idx] = { ...books[idx], title, synopsis, buyLink, coverImg }; setBooks(books); showToast('Libro aggiornato!', 'success'); }
+    if (idx !== -1) { books[idx] = { ...books[idx], title, synopsis, buyLink, coverImg, guestBook }; setBooks(books); showToast('Libro aggiornato!', 'success'); }
   } else {
-    books.push({ id: uid(), title, synopsis, buyLink, coverImg });
+    books.push({ id: uid(), title, synopsis, buyLink, coverImg, guestBook });
     setBooks(books); showToast('Libro aggiunto!', 'success');
   }
   resetBookForm(); showPanel('books');
@@ -913,6 +921,7 @@ function resetBookForm() {
   document.getElementById('book-cover-preview').innerHTML = '';
   document.getElementById('book-cover-preview').dataset.base64 = '';
   if (document.getElementById('book-cover-file')) document.getElementById('book-cover-file').value = '';
+  document.getElementById('book-guest').checked = false;
 }
 function editBook(id) {
   const book = getBooks().find(b => b.id === id);
@@ -923,6 +932,7 @@ function editBook(id) {
   document.getElementById('book-title').value = book.title || '';
   document.getElementById('book-synopsis').value = book.synopsis || '';
   document.getElementById('book-buy-link').value = book.buyLink || '';
+  document.getElementById('book-guest').checked = !!book.guestBook;
   if (book.coverImg) {
     document.getElementById('book-cover-url').value = book.coverImg.startsWith('data:') ? '' : book.coverImg;
     const prev = document.getElementById('book-cover-preview');
@@ -1111,6 +1121,7 @@ function renderAllBooks() {
     return `<tr>
       <td>${thumb}</td>
       <td><div class="post-row-title">${escHtml(b.title)}</div></td>
+      <td>${b.guestBook ? `<span class="badge" style="background:rgba(201,168,76,0.15); color:var(--gold); border:1px solid rgba(201,168,76,0.3);">Ospite</span>` : '—'}</td>
       <td>${b.buyLink ? `<a href="${escAttr(b.buyLink)}" target="_blank" style="color:var(--gold-dark); font-size:13px;">Link ↗</a>` : '—'}</td>
       <td><div class="action-group">
         <button class="btn btn-outline btn-sm" onclick="editBook('${b.id}')">Modifica</button>

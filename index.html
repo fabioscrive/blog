@@ -256,6 +256,14 @@ nav {
 .book-cover-placeholder { width: 100%; aspect-ratio: 2/3; background: var(--stone-light); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
 .book-cover-placeholder::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(201,168,76,0.05), transparent); }
 .book-cover-placeholder span { font-family: 'Playfair Display', serif; font-size: 64px; color: rgba(201,168,76,0.15); font-weight: 900; }
+.book-guest-label {
+  position: absolute; top: 14px; left: 0;
+  background: var(--gold); color: var(--stone);
+  font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 0.22em;
+  padding: 5px 14px 5px 12px;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 7px) 50%, 100% 100%, 0 100%);
+  pointer-events: none; z-index: 2;
+}
 .book-info { padding: 24px 22px 22px; }
 .book-title { font-family: 'Playfair Display', serif; font-size: 19px; color: var(--cream); font-weight: 700; margin-bottom: 10px; line-height: 1.25; }
 .book-synopsis { font-size: 15px; line-height: 1.72; margin-bottom: 20px; color: var(--text-body); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
@@ -713,7 +721,7 @@ function renderBooks() {
   empty.style.display = 'none';
   grid.innerHTML = _books.map(book => {
     const coverHtml = book.coverImg
-      ? `<img src="${escAttr(book.coverImg)}" alt="${escAttr(book.title)}" class="book-cover-img" onerror="this.style.display='none'">`
+      ? `<div style="position:relative;">${book.guestBook ? '<span class="book-guest-label">Libro Ospite</span>' : ''}<img src="${escAttr(book.coverImg)}" alt="${escAttr(book.title)}" class="book-cover-img" onerror="this.style.display='none'"></div>`
       : `<div class="book-cover-placeholder"><span>${escHtml((book.title||'L')[0])}</span></div>`;
     return `<div class="book-card">
       ${coverHtml}
