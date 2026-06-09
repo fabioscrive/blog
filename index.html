@@ -548,9 +548,25 @@ footer p { font-size: 13px; color: rgba(200,191,168,0.25); letter-spacing: 0.06e
 
 <script>
 // ── CONFIG GITHUB ──
-const GITHUB_USER = "fabioscrive";
-const GITHUB_REPO = "blog";
-const DATA_URL = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/data.json`;
+// Prova a leggere owner/repo dal localStorage (condiviso con admin.html),
+// poi cade su valori hardcodati come ultimo fallback.
+(function() {
+  try {
+    const gh = JSON.parse(localStorage.getItem('fabio_gh_config') || 'null');
+    if (gh && gh.owner && gh.repo) {
+      window._GH_USER   = gh.owner;
+      window._GH_REPO   = gh.repo;
+      window._GH_BRANCH = gh.branch || 'main';
+      return;
+    }
+  } catch(e) {}
+  window._GH_USER   = "fabioscrive";
+  window._GH_REPO   = "blog";
+  window._GH_BRANCH = "main";
+})();
+const GITHUB_USER = window._GH_USER;
+const GITHUB_REPO = window._GH_REPO;
+const DATA_URL = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${window._GH_BRANCH}/data.json`;
 
 // ── STATE ──
 let _posts = [], _books = [], _author = {}, _downloads = [];

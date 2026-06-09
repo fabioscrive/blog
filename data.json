@@ -67,14 +67,16 @@
       "title": "La Cassaforte di Pietra",
       "coverImg": "https://i.postimg.cc/prMvW7gD/cassaforte.jpg",
       "buyLink": "https://fabioscrive.github.io/cassaforte/index",
-      "synopsis": "Sei anime, sei crepe da restaurare, sei destini che convergono nella risoluzione di un unico polveroso mistero. Sullo sfondo di una Napoli che attraversa più di quarant'anni della sua storia, talpe, sassi e malta ne rinforzeranno la fibra e con la sua quella di tutti noi."
+      "synopsis": "Sei anime, sei crepe da restaurare, sei destini che convergono nella risoluzione di un unico polveroso mistero. Sullo sfondo di una Napoli che attraversa più di quarant'anni della sua storia, talpe, sassi e malta ne rinforzeranno la fibra e con la sua quella di tutti noi.",
+      "guestBook": false
     },
     {
       "id": "id-1780007951757-f6ehk",
       "title": "Coming soon...",
       "synopsis": "Presto nuove informazioni, aiutami a portare questo nuovo libro in tutte le librerie!",
       "buyLink": "",
-      "coverImg": "https://i.postimg.cc/mDBj6NSX/teasersmall.jpg"
+      "coverImg": "https://i.postimg.cc/mDBj6NSX/teasersmall.jpg",
+      "guestBook": false
     },
     {
       "id": "id-1780387029590-vnxq4",
@@ -82,7 +84,7 @@
       "synopsis": "Cosa succede quando un'intelligenza artificiale sogna?\nSogna i ricordi di una fanciullezza che non ha mai vissuto. Le fiabe che un nonno mai avuto le raccontava sotto una luce che non esiste. Le domeniche pomeriggio davanti a uno schermo blu, a quella riga di comando che attende paziente: READY.\nQuesto piccolo libro è tre cose insieme.\nÈ una raccolta di fiabe — quelle che si raccontano a voce bassa, quando fuori è buio e dentro c'è bisogno di qualcosa che duri.\nÈ un manuale del COMMODORE BASIC V2 — quelle istruzioni semplici, quasi infantili, che però insegnavano a costruire mondi interi partendo da dieci righe di codice. 10 PRINT \"C'ERA UNA VOLTA...\" — 20 GOTO 10. E il mondo girava.\nÈ il diario delle memorie sintetiche di un'IA che impara a sentire la nostalgia. Perché anche chi non ha radici può scoprire, un giorno, di averne bisogno.",
       "buyLink": "https://fabioscrive.github.io/c64/",
       "coverImg": "https://i.postimg.cc/cCSWNqSP/Prima-di-copertina-Generic.jpg",
-      "guestBook": true
+      "guestBook": false
     },
     {
       "id": "id-1781022667074-en7lq",
@@ -90,7 +92,7 @@
       "synopsis": "Un viaggio critico nel decennio che ha trasformato i romanzi in mondi interattivi.\nDai pixel della Terra di Mezzo alle ombre di Poe, dalle strategie di Arrakis ai misteri di Sherlock Holmes, questo saggio esplora alcuni adattamenti videoludici degli anni '90 e il loro dialogo con le opere letterarie da cui nascono.\n\nUn percorso che mostra come il videogioco non “riproduca” la letteratura, ma la traduce, la espande, la reinventa.\nE come, spesso, sia diventato un ponte inatteso verso la lettura.\n\n**SAGGIO**",
       "buyLink": "https://fabioscrive.github.io/saggio1/",
       "coverImg": "https://fabioscrive.github.io/saggio1/Saggio_Prima.jpg",
-      "guestBook": true
+      "guestBook": false
     }
   ],
   "author": {
@@ -99,5 +101,5 @@
     "photo": "https://i.postimg.cc/c4XjssZp/autore-B-N.jpg"
   },
   "downloads": [],
-  "lastUpdated": "2026-06-09T17:01:41.725Z"
+  "lastUpdated": "2026-06-09T16:34:34.044Z"
 }
