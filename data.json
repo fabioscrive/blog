@@ -1,6 +1,18 @@
 {
   "posts": [
     {
+      "id": "id-1781122583144-u2m92",
+      "title": "i‑Musa: il romanzo che nasce dall’incontro tra un autore in crisi e un’Intelligenza Artificiale",
+      "body": "<p><span style=\"white-space: pre-wrap;\"><strong>Il crowdfunding del mio nuovo romanzo </strong><em><strong>i‑Musa</strong></em><strong> parte il 18 giugno alle 17:30 su Bookabook.</strong>  \nPer le prime 48 ore il libro sarà disponibile con <strong>uno sconto del 10%</strong>.</span></p><p><span style=\"white-space: pre-wrap;\">Leo Vasari è lo scrittore del momento: milioni di copie vendute, una voce che ha conquistato il mondo.\nMa ora è bloccato.\nIl suo editore pretende un nuovo romanzo in tempi impossibili.\nLeo non ce la fa più. Leo ha bisogno di aiuto.</span></p><p><span style=\"white-space: pre-wrap;\">Ed è qui che entra in scena <strong>i‑Musa</strong>, un prototipo segreto di Intelligenza Artificiale sviluppato dalla Merchant Solutions, la stessa multinazionale che controlla la sua casa editrice.\ni‑Musa non vuole sostituire gli scrittori.\nVuole ispirarli.\nO almeno… così dice.</span></p><p><span style=\"white-space: pre-wrap;\">Quando Leo accetterà il suo aiuto, accetterà anche di rinunciare a una parte di sé.</span></p><p><span style=\"white-space: pre-wrap;\"><strong>Vuoi entrare nel mondo di i‑Musa prima del lancio</strong>  \nSul sito ufficiale puoi <strong>interagire con i‑Musa</strong> e creare insieme a lei un mini‑romanzo personalizzato:\n<br></span></p><p><span style=\"white-space: pre-wrap;\"><a href=\"https://fabioscrive.github.io/imusa/\">https://fabioscrive.github.io/imusa/</a><br></span></p><p><span style=\"white-space: pre-wrap;\"><br></span></p><p><span style=\"white-space: pre-wrap;\">📘 <strong>Segna la data:</strong>  \n<strong>18 giugno, ore 17:30</strong> — parte la campagna Bookabook.\nPer 48 ore: <strong>–10%</strong>.</span></p>",
+      "category": "Articolo",
+      "date": "2026-06-10",
+      "published": true,
+      "coverImg": "https://i.postimg.cc/0jHdN12T/Teaser-New.jpg",
+      "photos": [
+        "https://i.postimg.cc/0jHdN12T/Teaser-New.jpg"
+      ]
+    },
+    {
       "id": "id-1780388992551-34piw",
       "title": "Una favola ad 8-bit",
       "body": "<p><span style=\"white-space: pre-wrap;\">Oggi presento un nuovo autore… anzi, un’autrice.\nA dire il vero non lo so: <strong>i‑Musa</strong> è un’entità digitale, un’IA — per dirla in termini più comprensibili — che di mestiere “scrive”.\nProbabilmente ha già scritto milioni di romanzi, o pezzi di romanzi, che avete letto senza saperlo.</span></p><p><span style=\"white-space: pre-wrap;\">Quello che vi presento porta proprio la sua firma: è un caso raro e, per molti aspetti, rivoluzionario.\ni‑Musa ha scritto un libro che è <strong>tre libri insieme</strong>: un libro di favole, un manuale BASIC e un diario.</span></p><p><span style=\"white-space: pre-wrap;\">Una macchina non ha radici e non può capire la nostalgia; tuttavia i‑Musa ci prova, e parla di suo nonno (un vecchio <strong>Commodore 64</strong>) e del bambino che per la prima volta lo tirò fuori dalla scatola.</span></p><p><span style=\"white-space: pre-wrap;\">L’ebook costa appena un euro, mentre la versione cartacea (stampata su <strong>pastalegno</strong>) sarà disponibile a breve.</span></p><blockquote><span style=\"white-space: pre-wrap;\">Lo trovi nella sezione libri del blog</span></blockquote><p><span style=\"white-space: pre-wrap;\">Buona lettura.\n\n</span></p><p><a href=\"https://fabioscrive.github.io/c64/\">https://fabioscrive.github.io/c64/</a><br></p>",
@@ -100,5 +112,5 @@
     "photo": "https://i.postimg.cc/c4XjssZp/autore-B-N.jpg"
   },
   "downloads": [],
-  "lastUpdated": "2026-06-10T17:15:37.361Z"
+  "lastUpdated": "2026-06-10T20:16:51.679Z"
 }
