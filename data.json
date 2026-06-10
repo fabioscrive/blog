@@ -71,10 +71,11 @@
     },
     {
       "id": "id-1780007951757-f6ehk",
-      "title": "Coming soon...",
-      "synopsis": "Presto nuove informazioni, aiutami a portare questo nuovo libro in tutte le librerie!",
-      "buyLink": "",
-      "coverImg": "https://i.postimg.cc/mDBj6NSX/teasersmall.jpg"
+      "title": "i-Musa",
+      "synopsis": "La campagna di crowdfunding parte il 18 giugno alle 17:30.\n\nLeo Vasari è lo scrittore del momento: il suo primo romanzo ha venduto milioni di copie in tutto il mondo. È una star silenziosa, fragile, geniale… e ormai incapace di scrivere a comando.\nIl nuovo contratto con la Merchant Edizioni lo obbliga però a consegnare un altro libro in tempi impossibili. Leo è in crisi. Leo è bloccato. Leo ha bisogno di aiuto.\n\nÈ allora che qualcuno gli propone un prototipo segreto di Intelligenza Artificiale, sviluppato dalla Merchant Solutions, la stessa multinazionale che controlla la sua casa editrice.\nSi chiama i‑Musa.\nE quando Leo accetterà il suo aiuto, accetterà anche di rinunciare a una parte di sé.\n\nAssicurati di essere tra i primi a scoprire la storia di Leo e di i‑Musa.\nPreordina il libro: per le prime 48 ore dal lancio è scontato del 10%.",
+      "buyLink": "https://fabioscrive.github.io/imusa/",
+      "coverImg": "https://i.postimg.cc/0jHdN12T/Teaser-New.jpg",
+      "guestBook": false
     },
     {
       "id": "id-1780387029590-vnxq4",
@@ -99,5 +100,5 @@
     "photo": "https://i.postimg.cc/c4XjssZp/autore-B-N.jpg"
   },
   "downloads": [],
-  "lastUpdated": "2026-06-09T17:09:35.471Z"
+  "lastUpdated": "2026-06-10T17:15:37.361Z"
 }
