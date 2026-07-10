@@ -114,22 +114,6 @@
       "guestBook": false
     },
     {
-      "id": "id-1780387029590-vnxq4",
-      "title": "La favola del Commodore 64: Libro di favole a 8-bit",
-      "synopsis": "Cosa succede quando un'intelligenza artificiale sogna?\nSogna i ricordi di una fanciullezza che non ha mai vissuto. Le fiabe che un nonno mai avuto le raccontava sotto una luce che non esiste. Le domeniche pomeriggio davanti a uno schermo blu, a quella riga di comando che attende paziente: READY.\nQuesto piccolo libro è tre cose insieme.\nÈ una raccolta di fiabe — quelle che si raccontano a voce bassa, quando fuori è buio e dentro c'è bisogno di qualcosa che duri.\nÈ un manuale del COMMODORE BASIC V2 — quelle istruzioni semplici, quasi infantili, che però insegnavano a costruire mondi interi partendo da dieci righe di codice. 10 PRINT \"C'ERA UNA VOLTA...\" — 20 GOTO 10. E il mondo girava.\nÈ il diario delle memorie sintetiche di un'IA che impara a sentire la nostalgia. Perché anche chi non ha radici può scoprire, un giorno, di averne bisogno.",
-      "buyLink": "https://fabioscrive.github.io/c64/",
-      "coverImg": "https://i.postimg.cc/cCSWNqSP/Prima-di-copertina-Generic.jpg",
-      "guestBook": true
-    },
-    {
-      "id": "id-1781022667074-en7lq",
-      "title": "Dalla pagina allo schermo",
-      "synopsis": "Un viaggio critico nel decennio che ha trasformato i romanzi in mondi interattivi.\nDai pixel della Terra di Mezzo alle ombre di Poe, dalle strategie di Arrakis ai misteri di Sherlock Holmes, questo saggio esplora alcuni adattamenti videoludici degli anni '90 e il loro dialogo con le opere letterarie da cui nascono.\n\nUn percorso che mostra come il videogioco non “riproduca” la letteratura, ma la traduce, la espande, la reinventa.\nE come, spesso, sia diventato un ponte inatteso verso la lettura.\n\n**SAGGIO**",
-      "buyLink": "https://fabioscrive.github.io/saggio1/",
-      "coverImg": "https://fabioscrive.github.io/saggio1/Saggio_Prima.jpg",
-      "guestBook": true
-    },
-    {
       "id": "id-1781771290221-v4thy",
       "title": "Remigrazione",
       "synopsis": "Non tutto quello che si scrive merita di finire su carta. Ogni uomo deve essere osservatore del suo tempo, ognuno ha le proprie idee e le esprime come meglio crede. A me, si sarà capito ormai, piace scrivere. Bene o male, non è questo il punto. Scrivere equivale a parlare, a esprimersi, solo che ti consente di farlo in maniera più ragionata. Riflessiva. Quando scrivi puoi fare ricerca, cercare le fonti, leggere sull'argomento — lo puoi fare prima di scrivere. La scrittura si può rileggere e, fortunatamente, si può correggere. Sia chiaro, nulla è per sempre, neanche le idee o le parole usate per esprimere la propria opinione; di sicuro però dare fiato alla bocca, o scrivere un post di getto su un social, ha un costo nettamente inferiore rispetto a scrivere qualcosa di ragionato sullo stesso argomento.\nL'argomento è nel titolo. Il racconto lo potete leggere gratuitamente sulla piattaforma Wattpad. Pubblicherò i vari capitoli una volta a settimana, come vengono, senza pensarci troppo. La storia è qui nella mia testa, insieme al concetto che voglio esprimere per bocca dei personaggi. La prefazione e il primo capitolo sono già a vostra disposizione. Verosimilmente ogni domenica ce ne sarà uno nuovo. Sono capitoli brevi, ma se vi va di leggerli — almeno sono gratis.",
@@ -144,5 +128,5 @@
     "photo": "https://i.postimg.cc/c4XjssZp/autore-B-N.jpg"
   },
   "downloads": [],
-  "lastUpdated": "2026-06-29T21:42:24.928Z"
+  "lastUpdated": "2026-07-10T14:47:42.061Z"
 }
