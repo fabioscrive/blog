@@ -776,7 +776,7 @@ function renderBooks() {
         <p class="book-synopsis">${escHtml(book.synopsis||'')}</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
           <button class="btn-read" onclick="openBook('${book.id}')" style="font-size:11px;padding:9px 18px;">Scopri di più</button>
-          ${book.buyLink ? `<a href="${escAttr(book.buyLink)}" target="_blank" rel="noopener" class="btn-buy">Acquista</a>` : ''}
+          ${book.buyLink ? `<a href="${escAttr(book.buyLink)}" target="_blank" rel="noopener" class="btn-buy">ta</a>` : ''}
         </div>
       </div>
     </div>`;
@@ -794,7 +794,7 @@ function openBook(id) {
     ${coverHtml}
     <h2 class="modal-title">${escHtml(book.title)}</h2>
     <div class="modal-body">${(book.synopsis||'').split('\n').map(l => l.trim() ? `<p>${escHtml(l)}</p>` : '').join('')}</div>
-    ${book.buyLink ? `<div style="margin-top:32px;"><a href="${escAttr(book.buyLink)}" target="_blank" rel="noopener" class="btn-buy" style="font-size:14px;padding:13px 30px;">Acquista ora</a></div>` : ''}`;
+    ${book.buyLink ? `<div style="margin-top:32px;"><a href="${escAttr(book.buyLink)}" target="_blank" rel="noopener" class="btn-buy" style="font-size:14px;padding:13px 30px;">Approfondisci</a></div>` : ''}`;
   document.getElementById('book-modal').classList.add('open');
 }
 function closeBookModal() { document.getElementById('book-modal').classList.remove('open'); }
