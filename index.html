@@ -870,29 +870,20 @@ window.addEventListener('click', e => {
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBookModal(); });
 
-// ── VISIT COUNTER (CountAPI – nessun backend, funziona su GitHub Pages) ──
-// Namespace unico per il sito: usa GITHUB_USER + GITHUB_REPO come chiave
+// ── VISIT COUNTER (CountAPI mirror – nessun backend, nessuna chiave, funziona su GitHub Pages) ──
+// La vecchia CounterAPI v1 è stata dismessa il 7 agosto 2026: questo mirror open-source
+// (countapi.mileshilliard.com) non ha namespace, quindi la chiave deve essere già unica di suo.
 async function initVisitCounter() {
-  const ns  = GITHUB_USER;          // es. "fabioscrive"
-  const key = GITHUB_REPO + '-visits'; // es. "blog-visits"
+  const key = `${GITHUB_USER}-${GITHUB_REPO}-visits`;
   const el  = document.getElementById('visit-count');
   try {
-    // hit: incrementa di 1 e restituisce il nuovo valore
-    const res = await fetch(`https://api.counterapi.dev/v1/${ns}/${key}/up`);
+    const res = await fetch(`https://countapi.mileshilliard.com/api/v1/hit/${key}`);
     if (!res.ok) throw new Error();
     const data = await res.json();
-    const count = data.count ?? data.value ?? '—';
-    el.textContent = Number(count).toLocaleString('it-IT');
+    const count = Number(data.value);
+    el.textContent = Number.isFinite(count) ? count.toLocaleString('it-IT') : '—';
   } catch {
-    // fallback silenzioso: prova a leggere senza incrementare
-    try {
-      const res2 = await fetch(`https://api.counterapi.dev/v1/${ns}/${key}`);
-      const d2   = await res2.json();
-      const c2   = d2.count ?? d2.value ?? '—';
-      el.textContent = Number(c2).toLocaleString('it-IT');
-    } catch {
-      el.textContent = '—';
-    }
+    el.textContent = '—';
   }
 }
 
