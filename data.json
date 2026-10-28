@@ -7,8 +7,10 @@
       "category": "",
       "date": "2026-09-28",
       "published": true,
-      "coverImg": "",
-      "photos": []
+      "coverImg": "https://i.postimg.cc/cJhcBz0j/I-MUSA-Volantino.jpg",
+      "photos": [
+        "https://i.postimg.cc/cJhcBz0j/I-MUSA-Volantino.jpg"
+      ]
     },
     {
       "id": "id-1783798328255-50k42",
@@ -146,5 +148,5 @@
     "photo": "https://i.postimg.cc/c4XjssZp/autore-B-N.jpg"
   },
   "downloads": [],
-  "lastUpdated": "2026-09-28T17:37:17.403Z"
+  "lastUpdated": "2026-10-28T12:12:33.987Z"
 }
